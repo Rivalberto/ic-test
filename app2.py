@@ -1,6 +1,6 @@
 import streamlit as st
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 # Funzioni per calcoli umidità
 def es_tetens(T_c):
