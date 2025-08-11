@@ -63,24 +63,24 @@ else:
     st.info("ℹ️ L'aria esterna e interna hanno la stessa umidità specifica.")
 
 # Grafico dinamico del rapporto di mescolanza
-RH_values = [20, 40, 60, 80, 100]
-T_range = np.linspace(-10, 40, 200)
-plt.figure(figsize=(8,5))
-for rh in RH_values:
-    w_curve = mixing_ratio_g_per_kg(T_range, rh, P_atm)
-    plt.plot(T_range, w_curve, label=f"RH {rh}%")
+#RH_values = [20, 40, 60, 80, 100]
+#T_range = np.linspace(-10, 40, 200)
+#plt.figure(figsize=(8,5))
+#for rh in RH_values:
+#    w_curve = mixing_ratio_g_per_kg(T_range, rh, P_atm)
+#    plt.plot(T_range, w_curve, label=f"RH {rh}%")
 
 # Linee verticali per interno ed esterno
-plt.axvline(T_int, color='red', linestyle='--', label="T interna")
-plt.axvline(T_ext, color='blue', linestyle='--', label="T esterna")
+#plt.axvline(T_int, color='red', linestyle='--', label="T interna")
+#plt.axvline(T_ext, color='blue', linestyle='--', label="T esterna")
 
 # Punto evidenziato per interno/esterno
-plt.scatter([T_int], [w_int], color=verdict_color, s=100, zorder=5, label="Interno")
-plt.scatter([T_ext], [w_ext], color=verdict_color, s=100, zorder=5, marker='x', label="Esterno")
+#plt.scatter([T_int], [w_int], color=verdict_color, s=100, zorder=5, label="Interno")
+#plt.scatter([T_ext], [w_ext], color=verdict_color, s=100, zorder=5, marker='x', label="Esterno")
 
-plt.xlabel("Temperatura (°C)")
-plt.ylabel("Rapporto di mescolanza (g/kg)")
-plt.title(f"Rapporto di mescolanza vs Temperatura — {verdict}")
-plt.grid(True)
-plt.legend()
-st.pyplot(plt)
+#plt.xlabel("Temperatura (°C)")
+#plt.ylabel("Rapporto di mescolanza (g/kg)")
+#plt.title(f"Rapporto di mescolanza vs Temperatura — {verdict}")
+#plt.grid(True)
+#plt.legend()
+#st.pyplot(plt)
