@@ -110,7 +110,7 @@ print(response.content)
 
 w_int = 1
 w_ext = 1
-ratio = w_int/w_ext
+ratio = w_int / w_ext if w_ext != 0 else np.nan
 Td_int = 1
 Td_ext = 1
 
