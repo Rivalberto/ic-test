@@ -81,10 +81,10 @@ st.write(body)
 
 values = dict()
 for key in body:{
-    values['temperature'] = body[key][0]
-    values['humidity'] = body[key][1]
-    values['pressure'] = body[key][2]
-    values['co2'] = body[key][3]
+    values["temperature"] = body[key][0]
+    values["humidity"] = body[key][1]
+    values["pressure"] = body[key][2]
+    values["co2"] = body[key][3]
 }
 
 ## Add timestamps
