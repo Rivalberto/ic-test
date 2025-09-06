@@ -26,6 +26,7 @@ MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:
 
 #SCOPE = 'read_station'
 MAC_station = '70:ee:50:64:49:34' # MAC address of the device looks like: '21:ff:31:69:2d:19'
+MAC_station_module = 'h6533f2'
 
 date_start = datetime.now()-timedelta(days=1)
 date_start = int(date_start.replace(tzinfo=None).timestamp())
@@ -61,7 +62,7 @@ data = response.json()
 
 # Create the payload for API call (station)
 params={'device_id': MAC_station,
-        #'module_id': MAC_station,
+        'module_id': MAC_station_module,
         'scale': '1hour',
         #'type': 'temperature',
         'type': 'temperature,humidity,pressure,co2',
