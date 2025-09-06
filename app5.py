@@ -82,12 +82,12 @@ st.write(body)
 
 values = dict()
 for key in body:
-    #values["temperature"] = body[key][0]
-    #values["humidity"] = body[key][1]
-    #values["pressure"] = body[key][2]
-    #values["co2"] = body[key][3]
-    if not math.isnan(body[key][0]):
-        st.write(body[key][0])
+    values["temperature"] = body[key][0]
+    values["humidity"] = body[key][1]
+    values["pressure"] = body[key][2]
+    values["co2"] = body[key][3]
+    #if not math.isnan(body[key][0]):
+    #st.write(body[key][0])
 
 ## Add timestamps
 #datetime_start = datetime.fromtimestamp(body['beg_time'])
