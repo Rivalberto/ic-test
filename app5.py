@@ -81,7 +81,7 @@ body = response.json()
 st.write(body)
 
 for key in body:{
-    print(key,":", body[key])
+    st.write(key,":", body[key])
 }
 
 values = dict()
