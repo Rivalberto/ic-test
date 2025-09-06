@@ -76,7 +76,7 @@ response = requests.get(url=URL, params=params, headers=headers)
 #print(response.content)
 st.write(response.content)
 
-body = response.json()['body'][0]
+body = response.json()['body']
 st.write(body)
 
 values = dict()
