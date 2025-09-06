@@ -88,11 +88,9 @@ payload={'grant_type': 'refresh_token',
          'refresh_token': netatmo_refresh_token,
          'client_id': CLIENT_ID,
          'client_secret': CLIENT_SECRET}
-
-# Create headers
-
 print(payload)
 
+# Create headers
 headers = {
     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
 }
