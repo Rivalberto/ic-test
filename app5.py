@@ -259,7 +259,7 @@ def main():
              'client_id': CLIENT_ID,
              'client_secret': CLIENT_SECRET}
     #print(payload)
-    st.write(payload)
+    #st.write(payload)
     
     # Create headers
     headers = {
