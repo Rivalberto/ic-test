@@ -351,7 +351,7 @@ def main():
     else:
         st.error("Impossibile calcolare rapporto di miscela e umidità specifica a causa di errori precedenti.")
 
-    st.error("Impossibile)
+    st.error("Impossibile")
             
     # Indicatore visivo testuale e colore per grafico
     st.subheader("Risultato")
