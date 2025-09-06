@@ -173,7 +173,7 @@ def main():
     MAC_station = '70:ee:50:64:49:34' # MAC address of the device looks like: '21:ff:31:69:2d:19'
     MAC_station_module_ext = '02:00:00:65:33:f2'
     
-    date_start = datetime.now()-timedelta(minutes=30)
+    date_start = datetime.now()-timedelta(minutes=120)
     #date_start = datetime.now()
     date_start = int(date_start.replace(tzinfo=None).timestamp())
     #date_end = datetime.now()+timedelta(minutes=10)
@@ -191,7 +191,7 @@ def main():
     
     # Create the payload for API call (homecoach)
     params={'device_id': MAC_homecoach,
-            'scale': '1hour',
+            'scale': '30min',
             'type': 'temperature,humidity,pressure,co2',
             'date_begin': date_start,
             #'date_end': date_end,
@@ -218,7 +218,7 @@ def main():
     # Create the payload for API call (station)
     params={'device_id': MAC_station,
             'module_id': MAC_station_module_ext,
-            'scale': '1hour',
+            'scale': '30min',
             #'type': 'temperature',
             'type': 'temperature,humidity',
             'date_begin': date_start,
