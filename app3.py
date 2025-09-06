@@ -98,6 +98,6 @@ headers = {
 response = requests.post(url=URL, data=payload, headers=headers)
 print(response.content)
 
-# Parse response data
-netatmo_access_token = response.json()['access_token']
-print(response.status_code)
+## Parse response data
+#netatmo_access_token = response.json()['access_token']
+#print(response.status_code)
