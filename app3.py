@@ -54,6 +54,8 @@ headers = {
 response = requests.get(url=URL, params=params, headers=headers)
 print(response.content)
 
+exit()
+
 # Parse response data
 print(response.json())
 
