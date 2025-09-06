@@ -11,8 +11,8 @@ EMAIL = ''
 PASSWORD = ''
 
 # App credentials
-CLIENT_ID = '68b74b4ac2bea2591d0ae884' # Sometimes called app ID, looks like: '5989eA5B1AF3d8fc015d4215'
-CLIENT_SECRET = 'OPuXZVyQYeN4inJQ0tH8WRApLVQWCPhOl' # looks like: 'BHtNLOTNSsbQFSqpCoGsQkOCjZJrothMwW'
+CLIENT_ID = '68bc5cc2dc51f3e3360f3d22' # Sometimes called app ID, looks like: '5989eA5B1AF3d8fc015d4215'
+CLIENT_SECRET = 'UeKLTCHiucBfiyBvVqmRN9iC9czdbmnMGcp' # looks like: 'BHtNLOTNSsbQFSqpCoGsQkOCjZJrothMwW'
 
 # These tokens are generated in the 'app' created on dev.netatmo.com (scope: read_homecoach)
 netatmo_access_token = '5e0f7e2dc5bdbd000c158377|c846c594c289c25aa3775dc649990d5b' # looks like: 'cde723283f7ab2d2786fb1f1|506be379de09b2ff5d3e25e56ebb8cdf'
