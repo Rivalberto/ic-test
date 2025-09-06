@@ -3,6 +3,9 @@
 # - Register an app on https://dev.netatmo.com/ (Top right, 'My apps')
 # - Device: Home coach
 
+from datetime import datetime, timedelta
+import requests
+
 # User credentials
 EMAIL = ''
 PASSWORD = ''
@@ -12,14 +15,15 @@ CLIENT_ID = '68b74b4ac2bea2591d0ae884' # Sometimes called app ID, looks like: '5
 CLIENT_SECRET = 'OPuXZVyQYeN4inJQ0tH8WRApLVQWCPhOl' # looks like: 'BHtNLOTNSsbQFSqpCoGsQkOCjZJrothMwW'
 
 # These tokens are generated in the 'app' created on dev.netatmo.com (scope: read_homecoach)
-netatmo_access_token = '5e0f7e2dc5bdbd000c158377|88277914a9f5bdebfd86df67d3672f0e' # looks like: 'cde723283f7ab2d2786fb1f1|506be379de09b2ff5d3e25e56ebb8cdf'
-netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|eac9cc4061251e9c818a05532f97754e'# looks like: 'cde723283f7ab2d2786fb1f1|9977bb61decf0ed99db97b096e66fe77'
+netatmo_access_token = '5e0f7e2dc5bdbd000c158377|2e52514cffacf1028646b884f90df4c2' # looks like: 'cde723283f7ab2d2786fb1f1|506be379de09b2ff5d3e25e56ebb8cdf'
+
+netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|41c022c9fccfe1da12325738fb4f1f00'# looks like: 'cde723283f7ab2d2786fb1f1|9977bb61decf0ed99db97b096e66fe77'
 
 SCOPE = 'read_homecoach'
 MAC = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
 
 #SCOPE = 'read_station'
-MAC = '70:ee:50:64:49:34' # MAC address of the device looks like: '21:ff:31:69:2d:19'
+#MAC = '70:ee:50:64:49:34' # MAC address of the device looks like: '21:ff:31:69:2d:19'
 
 date_start = datetime.now()-timedelta(days=1)
 date_start = int(date_start.replace(tzinfo=None).timestamp())
@@ -29,14 +33,15 @@ URL = 'https://api.netatmo.com/api/getmeasure'
 
 # Create the payload for API call
 params={'device_id': MAC,
-        'module_id': MAC,
-        'scale': '30min',
-        'type': 'temperature,humidity,co2,pressure,noise',
-        'date_begin': date_start,
-        'date_end': date_end,
-        'limit': '1024',
-        'optimize': 'true',
-        'real_time': 'true'}
+        #'module_id': MAC,
+        'scale': '1hour',
+        'type': 'temperature',
+        #'type': 'temperature,humidity,co2,pressure,noise',
+        #'date_begin': date_start,
+        #'date_end': date_end,
+        #'limit': '1024',
+        'optimize': 'false',
+        'real_time': 'false'}
 print(params)
 
 # Create the header for API call
@@ -94,4 +99,3 @@ print(response.content)
 # Parse response data
 netatmo_access_token = response.json()['access_token']
 print(response.status_code)
-
