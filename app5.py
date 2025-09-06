@@ -287,7 +287,7 @@ def main():
     st.write(f"Umidità relativa interna: {rh_indoor:.2f}%")
     st.write(f"Temperatura esterna: {t_outdoor:.2f}°C")
     st.write(f"Umidità relativa esterna: {rh_outdoor:.2f}%")
-    st.write(f"Pressione atmosferica: {rh_outdoor:.2f}hPA")
+    st.write(f"Pressione atmosferica: {p_atm:.2f}hPA")
     
     if not (0 <= rh_indoor <= 100 and 0 <= rh_outdoor <= 100):
         st.write("Errore: L'umidità relativa deve essere tra 0 e 100%.")
