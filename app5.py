@@ -200,7 +200,7 @@ def main():
     # Make API call
     response = requests.get(url=URL, params=params, headers=headers)
     #print(response.content)
-    st.write(response.content)
+    #st.write(response.content)
     
     body = response.json()['body']
     values_homecoach = dict()
@@ -209,7 +209,7 @@ def main():
         values_homecoach["humidity"] = body[key][1]
         values_homecoach["pressure"] = body[key][2]
         values_homecoach["co2"] = body[key][3]
-    st.write(values_homecoach)
+    #st.write(values_homecoach)
     
     # Create the payload for API call (station)
     params={'device_id': MAC_station,
@@ -227,14 +227,14 @@ def main():
     
     response = requests.get(url=URL, params=params, headers=headers)
     #print(response.content)
-    st.write(response.content)
+    #st.write(response.content)
     
     body = response.json()['body']
     values_station_ext = dict()
     for key in body:
         values_station_ext["temperature"] = body[key][0]
         values_station_ext["humidity"] = body[key][1]
-    st.write(values_station_ext)
+    #st.write(values_station_ext)
     
     ## Add timestamps
     #datetime_start = datetime.fromtimestamp(body['beg_time'])
@@ -282,6 +282,12 @@ def main():
     t_outdoor = values_station_ext["temperature"]
     rh_outdoor = values_station_ext["humidity"]
     p_atm = values_homecoach["pressure"]
+
+    st.write(f"Temperatura interna: {t_indoor:.2f}°C")
+    st.write(f"Umidità relativa interna: {rh_indoor:.2f}%")
+    st.write(f"Temperatura esterna: {t_outdoor:.2f}°C")
+    st.write(f"Umidità relativa esterna: {rh_outdoor:.2f}%")
+    st.write(f"Pressione atmosferica: {rh_outdoor:.2f}hPA")
     
     if not (0 <= rh_indoor <= 100 and 0 <= rh_outdoor <= 100):
         st.write("Errore: L'umidità relativa deve essere tra 0 e 100%.")
