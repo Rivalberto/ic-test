@@ -79,6 +79,10 @@ st.write(response.content)
 body = response.json()['body']
 st.write(body)
 
+for key in body:{
+    print(key,":", body[key])
+}
+
 values = dict()
 values['temperature'] = [val[0] for val in body['value']]
 values['humidity'] = [val[1] for val in body['value']]
