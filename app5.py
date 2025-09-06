@@ -11,10 +11,6 @@ import numpy as np
 
 st.title("Calcolatore confronto rapporti di mescolanza e punto di rugiada")
 
-# User credentials
-EMAIL = ''
-PASSWORD = ''
-
 # App credentials
 CLIENT_ID = '68bc5cc2dc51f3e3360f3d22' # Sometimes called app ID, looks like: '5989eA5B1AF3d8fc015d4215'
 CLIENT_SECRET = 'UeKLTCHiucBfiyBvVqmRN9iC9czdbmnMGcp' # looks like: 'BHtNLOTNSsbQFSqpCoGsQkOCjZJrothMwW'
@@ -24,11 +20,11 @@ netatmo_access_token = '5e0f7e2dc5bdbd000c158377|8c67bc6f9def3ff2012ab2fb3038f5f
 
 netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|b8fc6cef23cbe46d45bb2ff666bf675f' # looks like: 'cde723283f7ab2d2786fb1f1|9977bb61decf0ed99db97b096e66fe77'
 
-SCOPE = 'read_homecoach'
-MAC = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
+#SCOPE = 'read_homecoach'
+MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
 
 #SCOPE = 'read_station'
-#MAC = '70:ee:50:64:49:34' # MAC address of the device looks like: '21:ff:31:69:2d:19'
+MAC_station = '70:ee:50:64:49:34' # MAC address of the device looks like: '21:ff:31:69:2d:19'
 
 date_start = datetime.now()-timedelta(days=1)
 date_start = int(date_start.replace(tzinfo=None).timestamp())
@@ -36,27 +32,44 @@ date_end = int(datetime.now().timestamp())
 
 URL = 'https://api.netatmo.com/api/getmeasure'
 
-# Create the payload for API call
-params={'device_id': MAC,
-        #'module_id': MAC,
-        'scale': '1hour',
-        #'type': 'temperature',
-        'type': 'temperature,humidity,co2,pressure,noise',
-        #'date_begin': date_start,
-        #'date_end': date_end,
-        'limit': '1',
-        'optimize': 'false',
-        'real_time': 'true'}
-#print(params)
-st.write(params)
-
 # Create the header for API call
 headers = {
     "accept": "application/json",
     "Authorization": f"Bearer {netatmo_access_token}"
 }
 
+# Create the payload for API call
+params={'device_id': MAC_homecoach,
+        #'module_id': MAC_homecoach,
+        'scale': '1hour',
+        'type': 'temperature,humidity,pressure,co2',
+        #'date_begin': date_start,
+        #'date_end': date_end,
+        'limit': '1',
+        'optimize': 'false',
+        'real_time': 'true'}
+#print(params)
+#st.write(params)
+
 # Make API call
+response = requests.get(url=URL, params=params, headers=headers)
+#print(response.content)
+st.write(response.content)
+
+# Create the payload for API call
+params={'device_id': MAC_station,
+        #'module_id': MAC_station,
+        'scale': '1hour',
+        #'type': 'temperature',
+        'type': 'temperature,humidity,pressure,co2',
+        #'date_begin': date_start,
+        #'date_end': date_end,
+        'limit': '1',
+        'optimize': 'false',
+        'real_time': 'true'}
+#print(params)
+#st.write(params)
+
 response = requests.get(url=URL, params=params, headers=headers)
 #print(response.content)
 st.write(response.content)
