@@ -55,9 +55,9 @@ params={'device_id': MAC_homecoach,
 # Make API call
 response = requests.get(url=URL, params=params, headers=headers)
 #print(response.content)
-#st.write(response.content)
+st.write(response.content)
 
-body = response.json()[body]
+body = response.json()['body']
 values_homecoach = dict()
 for key in body:
     values_homecoach["temperature"] = body[key][0]
@@ -80,7 +80,7 @@ params={'device_id': MAC_station,
 
 response = requests.get(url=URL, params=params, headers=headers)
 #print(response.content)
-#st.write(response.content)
+st.write(response.content)
 
 body = response.json()['body']
 values_station_ext = dict()
