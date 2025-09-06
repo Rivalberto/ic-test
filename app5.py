@@ -281,7 +281,7 @@ def main():
     rh_indoor = values_homecoach["humidity"]
     t_outdoor = values_station_ext["temperature"]
     rh_outdoor = values_station_ext["humidity"]
-    p_atm_input = values_homecoach["pressure"]
+    p_atm = values_homecoach["pressure"]
     
     if not (0 <= rh_indoor <= 100 and 0 <= rh_outdoor <= 100):
         st.write("Errore: L'umidità relativa deve essere tra 0 e 100%.")
