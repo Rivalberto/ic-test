@@ -57,7 +57,7 @@ print(response.content)
 # Parse response data
 print(response.json())
 
-exit
+exit()
 
 body = response.json()['body'][0]
 
