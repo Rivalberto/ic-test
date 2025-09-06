@@ -89,6 +89,8 @@ for key in body:
     #if not math.isnan(body[key][0]):
     #st.write(body[key][0])
 
+st.write(values)
+
 ## Add timestamps
 #datetime_start = datetime.fromtimestamp(body['beg_time'])
 
