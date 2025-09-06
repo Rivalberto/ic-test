@@ -39,9 +39,9 @@ params={'device_id': MAC,
         #'type': 'temperature,humidity,co2,pressure,noise',
         #'date_begin': date_start,
         #'date_end': date_end,
-        #'limit': '1024',
+        'limit': '1',
         'optimize': 'false',
-        'real_time': 'false'}
+        'real_time': 'true'}
 print(params)
 
 # Create the header for API call
@@ -90,6 +90,9 @@ payload={'grant_type': 'refresh_token',
          'client_secret': CLIENT_SECRET}
 
 # Create headers
+
+print(payload)
+
 headers = {
     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
 }
