@@ -348,8 +348,8 @@ def main():
     else:
         st.write("Impossibile calcolare il rapporto (w_indoor / w_outdoor) a causa di condizioni non valide o estreme.")
 
-    except ValueError:
-        st.write("\nErrore: Assicurati di inserire valori numerici validi per temperature, umidità e pressione.")
-    except Exception as e:
-        st.write(f"\nSi è verificato un errore inaspettato: {e}")
+    #except ValueError:
+    #    st.write("\nErrore: Assicurati di inserire valori numerici validi per temperature, umidità e pressione.")
+    #except Exception as e:
+    #    st.write(f"\nSi è verificato un errore inaspettato: {e}")
 
