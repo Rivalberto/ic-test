@@ -38,7 +38,7 @@ headers = {
     "Authorization": f"Bearer {netatmo_access_token}"
 }
 
-# Create the payload for API call
+# Create the payload for API call (homecoach)
 params={'device_id': MAC_homecoach,
         #'module_id': MAC_homecoach,
         'scale': '1hour',
@@ -56,7 +56,9 @@ response = requests.get(url=URL, params=params, headers=headers)
 #print(response.content)
 st.write(response.content)
 
-# Create the payload for API call
+data = response.json()
+
+# Create the payload for API call (station)
 params={'device_id': MAC_station,
         #'module_id': MAC_station,
         'scale': '1hour',
@@ -73,6 +75,8 @@ params={'device_id': MAC_station,
 response = requests.get(url=URL, params=params, headers=headers)
 #print(response.content)
 st.write(response.content)
+
+data = response.json()
 
 ## Parse response data
 #print(response.json())
