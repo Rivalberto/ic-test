@@ -173,7 +173,7 @@ def main():
     MAC_station = '70:ee:50:64:49:34' # MAC address of the device looks like: '21:ff:31:69:2d:19'
     MAC_station_module_ext = '02:00:00:65:33:f2'
     
-    date_start = datetime.now()-timedelta(minutes=120)
+    date_start = datetime.now()-timedelta(minutes=90)
     #date_start = datetime.now()
     date_start = int(date_start.replace(tzinfo=None).timestamp())
     #date_end = datetime.now()+timedelta(minutes=10)
@@ -239,7 +239,7 @@ def main():
         values_station_ext["temperature"] = body[key][0]
         values_station_ext["humidity"] = body[key][1]
         st.write(f"\nTemperature: {values_station_ext["temperature"]:.2f} °C")
-        st.write(f"\nHumidity: {values_station_ext["temperature"]:.2f} %")
+        st.write(f"\nHumidity: {values_station_ext["humidity"]:.2f} %")
     st.write("Final values:")
     st.write(values_station_ext)
     
