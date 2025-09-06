@@ -213,12 +213,12 @@ def main():
         values_homecoach["humidity"] = body[key][1]
         values_homecoach["pressure"] = body[key][2]
         values_homecoach["co2"] = body[key][3]
-        st.write(f"\nTemperature: {values_homecoach["temperature"]:.2f} °C")
-        st.write(f"\nHumidity: {values_homecoach["humidity"]:.2f} %")
-        st.write(f"\nHumidity: {values_homecoach["pressure"]:.2f} hPa")
-        st.write(f"\nCO2: {values_homecoach["co2"]:.2f} ppm")
-    st.write("Final values:")
-    st.write(values_homecoach)
+        #st.write(f"\nTemperature: {values_homecoach["temperature"]:.2f} °C")
+        #st.write(f"\nHumidity: {values_homecoach["humidity"]:.2f} %")
+        #st.write(f"\nHumidity: {values_homecoach["pressure"]:.2f} hPa")
+        #st.write(f"\nCO2: {values_homecoach["co2"]:.2f} ppm")
+    #st.write("Final values:")
+    #st.write(values_homecoach)
     
     # Create the payload for API call (station)
     params={'device_id': MAC_station,
@@ -297,11 +297,11 @@ def main():
 
     st.write("\n--- Dati letti dai sensori ---")
     
-    st.write(f"Temperatura interna: {t_indoor:.2f}°C")
-    st.write(f"Umidità relativa interna: {rh_indoor:.2f}%")
-    st.write(f"Temperatura esterna: {t_outdoor:.2f}°C")
-    st.write(f"Umidità relativa esterna: {rh_outdoor:.2f}%")
-    st.write(f"Pressione atmosferica: {p_atm:.2f}hPA")
+    st.write(f"Temperatura interna: {t_indoor:.1f} °C")
+    st.write(f"Temperatura esterna: {t_outdoor:.1f} °C")
+    st.write(f"Umidità relativa interna: {rh_indoor:.0f} %")
+    st.write(f"Umidità relativa esterna: {rh_outdoor:.0f} %")
+    st.write(f"Pressione atmosferica: {p_atm:.1f} hPA")
     
     if not (0 <= rh_indoor <= 100 and 0 <= rh_outdoor <= 100):
         st.write("Errore: L'umidità relativa deve essere tra 0 e 100%.")
@@ -312,12 +312,12 @@ def main():
     # Calcola il punto di rugiada interno
     rh_indoor_decimal = rh_indoor / 100.0
     td_indoor = calculate_dew_point(t_indoor, rh_indoor_decimal)
-    st.write(f"Punto di rugiada interno calcolato: {td_indoor:.2f}°C")
+    st.write(f"Punto di rugiada interno calcolato: {td_indoor:.2f} °C")
 
     # Calcola il punto di rugiada esterno
     rh_outdoor_decimal = rh_outdoor / 100.0
     td_outdoor = calculate_dew_point(t_outdoor, rh_outdoor_decimal)
-    st.write(f"Punto di rugiada esterno calcolato: {td_outdoor:.2f}°C")
+    st.write(f"Punto di rugiada esterno calcolato: {td_outdoor:.2f} °C")
     
     can_open, ratio_value, pv_indoor_val, pv_outdoor_val = should_open_windows_based_on_TRH(
             t_indoor, rh_indoor,
