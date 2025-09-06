@@ -298,8 +298,8 @@ def main():
     st.write("\n--- Dati letti dai sensori ---")
     
     st.write(f"Temperatura interna: {t_indoor:.1f} °C")
-    st.write(f"Temperatura esterna: {t_outdoor:.1f} °C")
     st.write(f"Umidità relativa interna: {rh_indoor:.0f} %")
+    st.write(f"Temperatura esterna: {t_outdoor:.1f} °C")
     st.write(f"Umidità relativa esterna: {rh_outdoor:.0f} %")
     st.write(f"Pressione atmosferica: {p_atm:.1f} hPA")
     
