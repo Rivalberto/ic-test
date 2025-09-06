@@ -55,6 +55,10 @@ response = requests.get(url=URL, params=params, headers=headers)
 print(response.content)
 
 # Parse response data
+print(response.json())
+
+exit
+
 body = response.json()['body'][0]
 
 values = dict()
