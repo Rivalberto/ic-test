@@ -1,3 +1,4 @@
+
 # Source: https://dev.netatmo.com/apidocumentation/oauth
 # Notes:
 # - Register an app on https://dev.netatmo.com/ (Top right, 'My apps')
@@ -5,6 +6,10 @@
 
 from datetime import datetime, timedelta
 import requests
+import streamlit as st
+import numpy as np
+
+st.title("Calcolatore confronto rapporti di mescolanza e punto di rugiada")
 
 # User credentials
 EMAIL = ''
@@ -102,3 +107,34 @@ print(response.content)
 ## Parse response data
 #netatmo_access_token = response.json()['access_token']
 #print(response.status_code)
+
+w_int = 1
+w_ext = 1
+ratio = w_int/w_ext
+Td_int = 1
+Td_ext = 1
+
+st.subheader("Risultati")
+st.write(f"Rapporto di mescolanza interno: {w_int:.2f} g/kg")
+st.write(f"Rapporto di mescolanza esterno: {w_ext:.2f} g/kg")
+st.write(f"Rapporto (interno / esterno): {ratio:.2f}")
+st.write(f"Punto di rugiada interno: {Td_int:.2f} °C")
+st.write(f"Punto di rugiada esterno: {Td_ext:.2f} °C")
+
+# Indicatore visivo testuale e colore per grafico
+if np.isnan(ratio):
+    verdict = "Dati non validi"
+    verdict_color = 'gray'
+    st.warning("Il rapporto di mescolanza esterno è zero: dati non validi.")
+elif w_ext < w_int:
+    verdict = "Apri"
+    verdict_color = 'green'
+    st.success("✅ L'aria esterna è più secca: aprendo le finestre ridurrai l'umidità interna.")
+elif w_ext > w_int:
+    verdict = "Chiudi"
+    verdict_color = 'red'
+    st.error("❌ L'aria esterna è più umida: aprendo le finestre aumenterai l'umidità interna.")
+else:
+    verdict = "Uguale"
+    verdict_color = 'blue'
+    st.info("ℹ️ L'aria esterna e interna hanno la stessa umidità specifica.")
