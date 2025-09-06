@@ -10,151 +10,346 @@ import streamlit as st
 import math
 import numpy as np
 
-st.title("Calcolatore confronto rapporti di mescolanza e punto di rugiada")
+def calculate_A_T(temperature_celsius):
+    """
+    Calcola la parte esponenziale della funzione di pressione di vapore saturo (A(T)).
+    La temperatura deve essere in gradi Celsius.
+    """
+    return 6.1094 * math.exp((17.625 * temperature_celsius) / (temperature_celsius + 243.04))
 
-# App credentials
-CLIENT_ID = '68bc5cc2dc51f3e3360f3d22' # Sometimes called app ID, looks like: '5989eA5B1AF3d8fc015d4215'
-CLIENT_SECRET = 'UeKLTCHiucBfiyBvVqmRN9iC9czdbmnMGcp' # looks like: 'BHtNLOTNSsbQFSqpCoGsQkOCjZJrothMwW'
+def calculate_Pv_from_T_RH(temperature_celsius, relative_humidity_decimal):
+    """
+    Calcola la pressione di vapore reale (Pv) in hPa da temperatura e umidità relativa.
+    """
+    if temperature_celsius < -80: # Limite di validità per la formula di Arden Buck
+        raise ValueError("Temperatura troppo bassa per la formula di Arden Buck.")
+    return relative_humidity_decimal * calculate_A_T(temperature_celsius)
 
-# These tokens are generated in the 'app' created on dev.netatmo.com (scope: read_homecoach)
-netatmo_access_token = '5e0f7e2dc5bdbd000c158377|8c67bc6f9def3ff2012ab2fb3038f5fd' # looks like: 'cde723283f7ab2d2786fb1f1|506be379de09b2ff5d3e25e56ebb8cdf'
+def calculate_dew_point(temperature_celsius, relative_humidity_decimal):
+    """
+    Calcola il punto di rugiada (Td) in gradi Celsius da temperatura e umidità relativa.
+    """
+    if not (0 <= relative_humidity_decimal <= 1):
+        raise ValueError("L'umidità relativa deve essere tra 0 e 1 (decimale).")
 
-netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|b8fc6cef23cbe46d45bb2ff666bf675f' # looks like: 'cde723283f7ab2d2786fb1f1|9977bb61decf0ed99db97b096e66fe77'
+    # Calcola la pressione di vapore reale (Pv)
+    pv = calculate_Pv_from_T_RH(temperature_celsius, relative_humidity_decimal)
 
-#SCOPE = 'read_homecoach'
-MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
+    # Inverti la formula di Arden Buck per trovare il punto di rugiada
+    # Td = (243.04 * ln(Pv / 6.1094)) / (17.625 - ln(Pv / 6.1094))
+    try:
+        ln_pv_div_const = math.log(pv / 6.1094)
+        td = (243.04 * ln_pv_div_const) / (17.625 - ln_pv_div_const)
+        return td
+    except ValueError:
+        # Questo può accadere se pv è 0 o negativo (non fisico)
+        # o se il denominatore diventa 0 (condizioni estreme)
+        return float('-inf') # Punto di rugiada estremamente basso per aria molto secca
 
-#SCOPE = 'read_station'
-MAC_station = '70:ee:50:64:49:34' # MAC address of the device looks like: '21:ff:31:69:2d:19'
-MAC_station_module_ext = '02:00:00:65:33:f2'
+def calculate_absolute_humidity_density(pv_hpa, temperature_celsius):
+    """
+    Calcola l'umidità assoluta (densità di vapore acqueo) in g/m^3.
+    pv_hpa: Pressione di vapore reale in hPa.
+    temperature_celsius: Temperatura dell'aria in gradi Celsius.
+    """
+    # Costante dei gas specifica per il vapore acqueo (J/(kg·K))
+    R_v = 461.5 
 
-#date_start = datetime.now()-timedelta(days=1)
-#date_start = int(date_start.replace(tzinfo=None).timestamp())
-#date_end = int(datetime.now().timestamp())
+    # Converte la pressione di vapore da hPa a Pascal (Pa)
+    pv_pa = pv_hpa * 100 
 
-URL = 'https://api.netatmo.com/api/getmeasure'
+    # Converte la temperatura da Celsius a Kelvin
+    temperature_kelvin = temperature_celsius + 273.15
 
-# Create the header for API call
-headers = {
-    "accept": "application/json",
-    "Authorization": f"Bearer {netatmo_access_token}"
-}
+    # Calcola la densità di vapore acqueo (kg/m^3)
+    # rho_v = Pv / (Rv * T)
+    if temperature_kelvin <= 0: # Evita divisione per zero o temperature non fisiche
+        return 0.0 # Non è possibile calcolare o vapore non esiste a 0K
 
-# Create the payload for API call (homecoach)
-params={'device_id': MAC_homecoach,
-        'scale': '1hour',
-        'type': 'temperature,humidity,pressure,co2',
-        #'date_begin': date_start,
-        #'date_end': date_end,
-        'limit': '1',
-        'optimize': 'false',
-        'real_time': 'true'}
-#print(params)
-#st.write(params)
+    rho_v_kg_per_m3 = pv_pa / (R_v * temperature_kelvin)
 
-# Make API call
-response = requests.get(url=URL, params=params, headers=headers)
-#print(response.content)
-st.write(response.content)
+    # Converte da kg/m^3 a g/m^3
+    rho_v_g_per_m3 = rho_v_kg_per_m3 * 1000
 
-body = response.json()['body']
-values_homecoach = dict()
-for key in body:
-    values_homecoach["temperature"] = body[key][0]
-    values_homecoach["humidity"] = body[key][1]
-st.write(values_homecoach)
+    return rho_v_g_per_m3
 
-# Create the payload for API call (station)
-params={'device_id': MAC_station,
-        'module_id': MAC_station_module_ext,
-        'scale': '1hour',
-        #'type': 'temperature',
-        'type': 'temperature,humidity,pressure,co2',
-        #'date_begin': date_start,
-        #'date_end': date_end,
-        'limit': '1',
-        'optimize': 'false',
-        'real_time': 'true'}
-#print(params)
-#st.write(params)
+def calculate_mixing_ratio_from_pv(pv_hpa, p_atm_hpa):
+    """
+    Calcola il rapporto di miscela (w) in g/kg da Pv e Patm.
+    pv_hpa: Pressione di vapore reale in hPa.
+    p_atm_hpa: Pressione atmosferica in hPa.
+    """
+    if (p_atm_hpa - pv_hpa) <= 0: # Condizione di saturazione o non fisica
+        return float('inf') # Rappresenta umidità estremamente alta
 
-response = requests.get(url=URL, params=params, headers=headers)
-#print(response.content)
-st.write(response.content)
+    constant_0622 = 0.622 # Rapporto tra peso molecolare vapore acqueo e aria secca
+    w_kg_per_kg = (constant_0622 * pv_hpa) / (p_atm_hpa - pv_hpa)
+    return w_kg_per_kg * 1000 # Converte a g/kg
 
-body = response.json()['body']
-values_station_ext = dict()
-for key in body:
-    values_station_ext["temperature"] = body[key][0]
-    values_station_ext["humidity"] = body[key][1]
-st.write(values_station_ext)
+def calculate_specific_humidity_from_mixing_ratio(mixing_ratio_g_per_kg):
+    """
+    Calcola l'umidità specifica (q) in g/kg dal rapporto di miscela (w).
+    mixing_ratio_g_per_kg: Rapporto di miscela in g/kg.
+    """
+    # Converte w da g/kg a kg/kg per il calcolo
+    w_kg_per_kg = mixing_ratio_g_per_kg / 1000
 
-## Add timestamps
-#datetime_start = datetime.fromtimestamp(body['beg_time'])
+    if (1 + w_kg_per_kg) == 0: # Evita divisione per zero
+        return float('inf')
 
-## Parse sampling interval
-#step_time = 1 # This default value should be overwritten, if there is only one sample
-#if 'step_time' in payload:
-#    step_time = payload['step_time']
+    q_kg_per_kg = w_kg_per_kg / (1 + w_kg_per_kg)
+    return q_kg_per_kg * 1000 # Converte a g/kg
 
-## Create timestamps
-#values['timestamp'] = [datetime_start + timedelta(seconds=i*step_time) for i in range(0, len(values['temperature']))]
 
-## Create dataframe
-#df = pd.DataFrame.from_dict(values)
-#df = df.set_index('timestamp')
-#df.head()
+def should_open_windows_based_on_TRH(
+    t_indoor_celsius, rh_indoor_percent,
+    t_outdoor_celsius, rh_outdoor_percent,
+    p_atm_hpa # La pressione atmosferica viene ora passata come argomento
+):
+    """
+    Determina se è utile aprire le finestre per abbassare l'umidità interna
+    basandosi su temperature e umidità relative.
+    Restituisce una tupla (True/False, ratio_w_indoor_to_w_outdoor, pv_indoor, pv_outdoor).
+    True se l'aria esterna è più secca, False altrimenti.
+    ratio_w_indoor_to_w_outdoor è il rapporto w_indoor / w_outdoor.
+    pv_indoor e pv_outdoor sono le pressioni di vapore reali.
 
-# Create payload
-URL = 'https://api.netatmo.com/oauth2/token'
-payload={'grant_type': 'refresh_token',
-         'refresh_token': netatmo_refresh_token,
-         'client_id': CLIENT_ID,
-         'client_secret': CLIENT_SECRET}
-#print(payload)
-st.write(payload)
+    t_indoor_celsius: Temperatura interna in gradi Celsius.
+    rh_indoor_percent: Umidità relativa interna in percentuale (es. 50 per 50%).
+    t_outdoor_celsius: Temperatura esterna in gradi Celsius.
+    rh_outdoor_percent: Umidità relativa esterna in percentuale (es. 70 per 70%).
+    p_atm_hpa: Pressione atmosferica in hPa.
+    """
+    rh_indoor_decimal = rh_indoor_percent / 100.0
+    rh_outdoor_decimal = rh_outdoor_percent / 100.0
 
-# Create headers
-headers = {
-    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-}
+    # Calcola la pressione di vapore reale per l'aria interna ed esterna
+    try:
+        pv_indoor = calculate_Pv_from_T_RH(t_indoor_celsius, rh_indoor_decimal)
+        pv_outdoor = calculate_Pv_from_T_RH(t_outdoor_celsius, rh_outdoor_decimal)
+    except ValueError as e:
+        print(f"Errore nel calcolo della pressione di vapore: {e}")
+        return False, None, None, None # Restituisce False e None per i valori in caso di errore
 
-## Make API call
-#response = requests.post(url=URL, data=payload, headers=headers)
-##print(response.content)
-#st.write(response.content)
+    # Gestione di casi limite per evitare divisioni per zero o valori non fisici
+    if pv_indoor >= p_atm_hpa or pv_outdoor >= p_atm_hpa:
+        # Condizioni estreme (saturazione o super-saturazione).
+        # In questi casi, l'aria è estremamente umida, e non è utile aprire le finestre.
+        return False, float('inf'), pv_indoor, pv_outdoor # Restituisce inf per il ratio se saturo
 
-## Parse response data
-#netatmo_access_token = response.json()['access_token']
-#print(response.status_code)
+    # Calcola i termini del rapporto di miscela
+    term1_numerator = pv_indoor
+    term1_denominator = (p_atm_hpa - pv_indoor)
 
-w_int = 1
-w_ext = 1
-ratio = w_int / w_ext if w_ext != 0 else np.nan
-Td_int = 1
-Td_ext = 1
+    term2_numerator = (p_atm_hpa - pv_outdoor)
+    term2_denominator = pv_outdoor
 
-st.subheader("Risultati")
-st.write(f"Rapporto di mescolanza interno: {w_int:.2f} g/kg")
-st.write(f"Rapporto di mescolanza esterno: {w_ext:.2f} g/kg")
-st.write(f"Rapporto (interno / esterno): {ratio:.2f}")
-st.write(f"Punto di rugiada interno: {Td_int:.2f} °C")
-st.write(f"Punto di rugiada esterno: {Td_ext:.2f} °C")
+    # Evita divisione per zero o valori molto piccoli nel denominatore
+    if term1_denominator <= 0 or term2_denominator <= 0:
+        return False, None, pv_indoor, pv_outdoor # Condizioni non fisiche o aria interna/esterna satura
 
-# Indicatore visivo testuale e colore per grafico
-if np.isnan(ratio):
-    verdict = "Dati non validi"
-    verdict_color = 'gray'
-    st.warning("Il rapporto di mescolanza esterno è zero: dati non validi.")
-elif w_ext < w_int:
-    verdict = "Apri"
-    verdict_color = 'green'
-    st.success("✅ L'aria esterna è più secca: aprendo le finestre ridurrai l'umidità interna.")
-elif w_ext > w_int:
-    verdict = "Chiudi"
-    verdict_color = 'red'
-    st.error("❌ L'aria esterna è più umida: aprendo le finestre aumenterai l'umidità interna.")
-else:
-    verdict = "Uguale"
-    verdict_color = 'blue'
-    st.info("ℹ️ L'aria esterna e interna hanno la stessa umidità specifica.")
+    ratio_w_indoor_to_w_outdoor = (term1_numerator / term1_denominator) * \
+                                  (term2_numerator / term2_denominator)
+
+    # Restituisce True se l'aria interna è più umida dell'esterna (rapporto > 1)
+    return ratio_w_indoor_to_w_outdoor > 1, ratio_w_indoor_to_w_outdoor, pv_indoor, pv_outdoor
+
+# --- Funzione principale per l'interazione con l'utente ---
+def main():
+
+    # App credentials
+    CLIENT_ID = '68bc5cc2dc51f3e3360f3d22' # Sometimes called app ID, looks like: '5989eA5B1AF3d8fc015d4215'
+    CLIENT_SECRET = 'UeKLTCHiucBfiyBvVqmRN9iC9czdbmnMGcp' # looks like: 'BHtNLOTNSsbQFSqpCoGsQkOCjZJrothMwW'
+    
+    # These tokens are generated in the 'app' created on dev.netatmo.com (scope: read_homecoach)
+    netatmo_access_token = '5e0f7e2dc5bdbd000c158377|8c67bc6f9def3ff2012ab2fb3038f5fd' # looks like: 'cde723283f7ab2d2786fb1f1|506be379de09b2ff5d3e25e56ebb8cdf'
+    
+    netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|b8fc6cef23cbe46d45bb2ff666bf675f' # looks like: 'cde723283f7ab2d2786fb1f1|9977bb61decf0ed99db97b096e66fe77'
+    
+    #SCOPE = 'read_homecoach'
+    MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
+    
+    #SCOPE = 'read_station'
+    MAC_station = '70:ee:50:64:49:34' # MAC address of the device looks like: '21:ff:31:69:2d:19'
+    MAC_station_module_ext = '02:00:00:65:33:f2'
+    
+    #date_start = datetime.now()-timedelta(days=1)
+    #date_start = int(date_start.replace(tzinfo=None).timestamp())
+    #date_end = int(datetime.now().timestamp())
+    
+    URL = 'https://api.netatmo.com/api/getmeasure'
+    
+    # Create the header for API call
+    headers = {
+        "accept": "application/json",
+        "Authorization": f"Bearer {netatmo_access_token}"
+    }
+    
+    # Create the payload for API call (homecoach)
+    params={'device_id': MAC_homecoach,
+            'scale': '1hour',
+            'type': 'temperature,humidity,pressure,co2',
+            #'date_begin': date_start,
+            #'date_end': date_end,
+            'limit': '1',
+            'optimize': 'false',
+            'real_time': 'true'}
+    #print(params)
+    #st.write(params)
+    
+    # Make API call
+    response = requests.get(url=URL, params=params, headers=headers)
+    #print(response.content)
+    st.write(response.content)
+    
+    body = response.json()['body']
+    values_homecoach = dict()
+    for key in body:
+        values_homecoach["temperature"] = body[key][0]
+        values_homecoach["humidity"] = body[key][1]
+        values_homecoach["pressure"] = body[key][2]
+        values_homecoach["co2"] = body[key][3]
+    st.write(values_homecoach)
+    
+    # Create the payload for API call (station)
+    params={'device_id': MAC_station,
+            'module_id': MAC_station_module_ext,
+            'scale': '1hour',
+            #'type': 'temperature',
+            'type': 'temperature,humidity',
+            #'date_begin': date_start,
+            #'date_end': date_end,
+            'limit': '1',
+            'optimize': 'false',
+            'real_time': 'true'}
+    #print(params)
+    #st.write(params)
+    
+    response = requests.get(url=URL, params=params, headers=headers)
+    #print(response.content)
+    st.write(response.content)
+    
+    body = response.json()['body']
+    values_station_ext = dict()
+    for key in body:
+        values_station_ext["temperature"] = body[key][0]
+        values_station_ext["humidity"] = body[key][1]
+    st.write(values_station_ext)
+    
+    ## Add timestamps
+    #datetime_start = datetime.fromtimestamp(body['beg_time'])
+    
+    ## Parse sampling interval
+    #step_time = 1 # This default value should be overwritten, if there is only one sample
+    #if 'step_time' in payload:
+    #    step_time = payload['step_time']
+    
+    ## Create timestamps
+    #values['timestamp'] = [datetime_start + timedelta(seconds=i*step_time) for i in range(0, len(values['temperature']))]
+    
+    ## Create dataframe
+    #df = pd.DataFrame.from_dict(values)
+    #df = df.set_index('timestamp')
+    #df.head()
+    
+    # Create payload
+    URL = 'https://api.netatmo.com/oauth2/token'
+    payload={'grant_type': 'refresh_token',
+             'refresh_token': netatmo_refresh_token,
+             'client_id': CLIENT_ID,
+             'client_secret': CLIENT_SECRET}
+    #print(payload)
+    st.write(payload)
+    
+    # Create headers
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    }
+    
+    ## Make API call
+    #response = requests.post(url=URL, data=payload, headers=headers)
+    ##print(response.content)
+    #st.write(response.content)
+    
+    ## Parse response data
+    #netatmo_access_token = response.json()['access_token']
+    #print(response.status_code)
+    
+    st.title("Calcolatore confronto rapporti di mescolanza e punto di rugiada")
+    
+    t_indoor = 
+    rh_indoor = 
+    t_outdoor = 
+    rh_outdoor = 
+    p_atm_input = 
+    
+    if not (0 <= rh_indoor <= 100 and 0 <= rh_outdoor <= 100):
+        st.write("Errore: L'umidità relativa deve essere tra 0 e 100%.")
+        return
+
+    # Calcola il punto di rugiada interno
+    rh_indoor_decimal = rh_indoor / 100.0
+    td_indoor = calculate_dew_point(t_indoor, rh_indoor_decimal)
+    st.write(f"Punto di rugiada interno calcolato: {td_indoor:.2f}°C")
+
+    # Calcola il punto di rugiada esterno
+    rh_outdoor_decimal = rh_outdoor / 100.0
+    td_outdoor = calculate_dew_point(t_outdoor, rh_outdoor_decimal)
+    st.write(f"Punto di rugiada esterno calcolato: {td_outdoor:.2f}°C")
+    
+    can_open, ratio_value, pv_indoor_val, pv_outdoor_val = should_open_windows_based_on_TRH(
+            t_indoor, rh_indoor,
+            t_outdoor, rh_outdoor,
+            p_atm # Passa la pressione inserita o predefinita
+    )
+    
+    # Calcola e stampa l'umidità assoluta (densità)
+    if pv_indoor_val is not None and pv_outdoor_val is not None:
+        abs_hum_indoor = calculate_absolute_humidity_density(pv_indoor_val, t_indoor)
+        abs_hum_outdoor = calculate_absolute_humidity_density(pv_outdoor_val, t_outdoor)
+        st.write(f"Umidità Assoluta Interna: {abs_hum_indoor:.2f} g/m³")
+        st.write(f"Umidità Assoluta Esterna: {abs_hum_outdoor:.2f} g/m³")
+    else:
+        st.write("Impossibile calcolare l'umidità assoluta a causa di errori precedenti.")
+
+    # Calcola e stampa il rapporto di miscela (w) e l'umidità specifica (q)
+    if pv_indoor_val is not None and pv_outdoor_val is not None:
+        w_indoor = calculate_mixing_ratio_from_pv(pv_indoor_val, p_atm)
+        q_indoor = calculate_specific_humidity_from_mixing_ratio(w_indoor)
+        
+        w_outdoor = calculate_mixing_ratio_from_pv(pv_outdoor_val, p_atm)
+        q_outdoor = calculate_specific_humidity_from_mixing_ratio(w_outdoor)
+        
+        st.write(f"Umidità Specifica Interna (q_indoor): {q_indoor:.2f} g/kg")
+        st.write(f"Umidità Specifica Esterna (q_outdoor): {q_outdoor:.2f} g/kg")
+            
+        st.write(f"Rapporto di Miscela Interno (w_indoor): {w_indoor:.2f} g/kg")
+        st.write(f"Rapporto di Miscela Esterno (w_outdoor): {w_outdoor:.2f} g/kg")
+            
+    else:
+        st.write("Impossibile calcolare rapporto di miscela e umidità specifica a causa di errori precedenti.")
+
+
+    # Indicatore visivo testuale e colore per grafico
+    st.write("\n--- Risultato ---")
+    if ratio_value is not None:
+        st.write(f"Il rapporto (w_indoor / w_outdoor) è: {ratio_value:.4f}")
+        if can_open:
+            verdict = "Apri"
+            verdict_color = 'green'
+            st.success("✅ L'aria esterna è più secca: aprendo le finestre ridurrai l'umidità interna.")
+            #verdict = "Uguale"
+            #verdict_color = 'blue'
+            #st.info("ℹ️ L'aria esterna e interna hanno la stessa umidità specifica.")
+        else:
+            verdict = "Chiudi"
+            verdict_color = 'red'
+            st.error("❌ L'aria esterna è più umida: aprendo le finestre aumenterai l'umidità interna.")
+    else:
+        st.write("Impossibile calcolare il rapporto (w_indoor / w_outdoor) a causa di condizioni non valide o estreme.")
+
+    except ValueError:
+        st.write("\nErrore: Assicurati di inserire valori numerici validi per temperature, umidità e pressione.")
+    except Exception as e:
+        st.write(f"\nSi è verificato un errore inaspettato: {e}")
+
