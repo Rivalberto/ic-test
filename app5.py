@@ -176,9 +176,9 @@ def main():
     date_start = datetime.now()-timedelta(minutes=10)
     #date_start = datetime.now()
     date_start = int(date_start.replace(tzinfo=None).timestamp())
-    date_end = datetime.now()+timedelta(minutes=10)
+    #date_end = datetime.now()+timedelta(minutes=10)
     #date_end = datetime.now()
-    date_end = int(date_end.replace(tzinfo=None).timestamp())
+    #date_end = int(date_end.replace(tzinfo=None).timestamp())
     #date_end = int(datetime.now().timestamp())
     
     URL = 'https://api.netatmo.com/api/getmeasure'
@@ -193,9 +193,9 @@ def main():
     params={'device_id': MAC_homecoach,
             'scale': '1hour',
             'type': 'temperature,humidity,pressure,co2',
-            #'date_begin': date_start,
-            'date_end': date_end,
-            'limit': '1',
+            'date_begin': date_start,
+            #'date_end': date_end,
+            #'limit': '1024',
             'optimize': 'false',
             'real_time': 'true'}
     #print(params)
@@ -221,9 +221,9 @@ def main():
             'scale': '1hour',
             #'type': 'temperature',
             'type': 'temperature,humidity',
-            #'date_begin': date_start,
-            'date_end': date_end,
-            'limit': '1',
+            'date_begin': date_start,
+            #'date_end': date_end,
+            #'limit': '1024',
             'optimize': 'false',
             'real_time': 'true'}
     #print(params)
@@ -238,7 +238,10 @@ def main():
     for key in body:
         values_station_ext["temperature"] = body[key][0]
         values_station_ext["humidity"] = body[key][1]
-    #st.write(values_station_ext)
+        st.write(f"\nTemperature: {values_station_ext["temperature"]:.2f} °C")
+        st.write(f"\nHumidity: {values_station_ext["temperature"]:.2f} %")
+    st.write("Final values:")
+    st.write(values_station_ext)
     
     ## Add timestamps
     #datetime_start = datetime.fromtimestamp(body['beg_time'])
