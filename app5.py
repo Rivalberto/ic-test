@@ -173,8 +173,8 @@ def main():
     MAC_station = '70:ee:50:64:49:34' # MAC address of the device looks like: '21:ff:31:69:2d:19'
     MAC_station_module_ext = '02:00:00:65:33:f2'
     
-    #date_start = datetime.now()-timedelta(days=1)
-    #date_start = int(date_start.replace(tzinfo=None).timestamp())
+    date_start = datetime.now()-timedelta(minutes=10)
+    date_start = int(date_start.replace(tzinfo=None).timestamp())
     #date_end = int(datetime.now().timestamp())
     
     URL = 'https://api.netatmo.com/api/getmeasure'
@@ -189,7 +189,7 @@ def main():
     params={'device_id': MAC_homecoach,
             'scale': '1hour',
             'type': 'temperature,humidity,pressure,co2',
-            #'date_begin': date_start,
+            'date_begin': date_start,
             #'date_end': date_end,
             'limit': '1',
             'optimize': 'false',
@@ -217,7 +217,7 @@ def main():
             'scale': '1hour',
             #'type': 'temperature',
             'type': 'temperature,humidity',
-            #'date_begin': date_start,
+            'date_begin': date_start,
             #'date_end': date_end,
             'limit': '1',
             'optimize': 'false',
