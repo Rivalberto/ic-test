@@ -213,7 +213,12 @@ def main():
         values_homecoach["humidity"] = body[key][1]
         values_homecoach["pressure"] = body[key][2]
         values_homecoach["co2"] = body[key][3]
-    #st.write(values_homecoach)
+        st.write(f"\nTemperature: {values_homecoach["temperature"]:.2f} °C")
+        st.write(f"\nHumidity: {values_homecoach["humidity"]:.2f} %")
+        st.write(f"\nHumidity: {values_homecoach["pressure"]:.2f} hPa")
+        st.write(f"\nCO2: {values_homecoach["co2"]:.2f} ppm")
+    st.write("Final values:")
+    st.write(values_homecoach)
     
     # Create the payload for API call (station)
     params={'device_id': MAC_station,
@@ -238,10 +243,10 @@ def main():
     for key in body:
         values_station_ext["temperature"] = body[key][0]
         values_station_ext["humidity"] = body[key][1]
-        st.write(f"\nTemperature: {values_station_ext["temperature"]:.2f} °C")
-        st.write(f"\nHumidity: {values_station_ext["humidity"]:.2f} %")
-    st.write("Final values:")
-    st.write(values_station_ext)
+        #st.write(f"\nTemperature: {values_station_ext["temperature"]:.2f} °C")
+        #st.write(f"\nHumidity: {values_station_ext["humidity"]:.2f} %")
+    #st.write("Final values:")
+    #st.write(values_station_ext)
     
     ## Add timestamps
     #datetime_start = datetime.fromtimestamp(body['beg_time'])
