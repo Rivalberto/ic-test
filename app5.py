@@ -7,6 +7,7 @@
 from datetime import datetime, timedelta
 import requests
 import streamlit as st
+import math
 import numpy as np
 
 st.title("Calcolatore confronto rapporti di mescolanza e punto di rugiada")
@@ -85,7 +86,7 @@ for key in body:{
     #values["humidity"] = body[key][1]
     #values["pressure"] = body[key][2]
     #values["co2"] = body[key][3]
-    if not math.isnan(body[key][0]):
+    if !math.isnan(body[key][0]):
         st.write(body[key][0])
 }
 
