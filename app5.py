@@ -174,7 +174,7 @@ def main():
     MAC_station_module_ext = '02:00:00:65:33:f2'
     
     #date_start = datetime.now()-timedelta(minutes=10)
-    date_start = datetime.now()+timedelta(minutes=10)
+    date_start = datetime.now()
     date_start = int(date_start.replace(tzinfo=None).timestamp())
     #date_end = int(datetime.now().timestamp())
     
