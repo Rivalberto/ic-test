@@ -15,9 +15,9 @@ CLIENT_ID = '68b74b4ac2bea2591d0ae884' # Sometimes called app ID, looks like: '5
 CLIENT_SECRET = 'OPuXZVyQYeN4inJQ0tH8WRApLVQWCPhOl' # looks like: 'BHtNLOTNSsbQFSqpCoGsQkOCjZJrothMwW'
 
 # These tokens are generated in the 'app' created on dev.netatmo.com (scope: read_homecoach)
-netatmo_access_token = '5e0f7e2dc5bdbd000c158377|2e52514cffacf1028646b884f90df4c2' # looks like: 'cde723283f7ab2d2786fb1f1|506be379de09b2ff5d3e25e56ebb8cdf'
+netatmo_access_token = '5e0f7e2dc5bdbd000c158377|c846c594c289c25aa3775dc649990d5b' # looks like: 'cde723283f7ab2d2786fb1f1|506be379de09b2ff5d3e25e56ebb8cdf'
 
-netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|41c022c9fccfe1da12325738fb4f1f00'# looks like: 'cde723283f7ab2d2786fb1f1|9977bb61decf0ed99db97b096e66fe77'
+netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|b8fc6cef23cbe46d45bb2ff666bf675f'# looks like: 'cde723283f7ab2d2786fb1f1|9977bb61decf0ed99db97b096e66fe77'
 
 SCOPE = 'read_homecoach'
 MAC = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
@@ -54,37 +54,33 @@ headers = {
 response = requests.get(url=URL, params=params, headers=headers)
 print(response.content)
 
-exit()
+## Parse response data
+#print(response.json())
 
-# Parse response data
-print(response.json())
+#body = response.json()['body'][0]
 
-exit()
+#values = dict()
+#values['temperature'] = [val[0] for val in body['value']]
+#values['humidity'] = [val[1] for val in body['value']]
+#values['co2'] = [val[2] for val in body['value']]
+#values['pressure'] = [val[3] for val in body['value']]
+#values['noise'] = [val[4] for val in body['value']]
 
-body = response.json()['body'][0]
+## Add timestamps
+#datetime_start = datetime.fromtimestamp(body['beg_time'])
 
-values = dict()
-values['temperature'] = [val[0] for val in body['value']]
-values['humidity'] = [val[1] for val in body['value']]
-values['co2'] = [val[2] for val in body['value']]
-values['pressure'] = [val[3] for val in body['value']]
-values['noise'] = [val[4] for val in body['value']]
+## Parse sampling interval
+#step_time = 1 # This default value should be overwritten, if there is only one sample
+#if 'step_time' in payload:
+#    step_time = payload['step_time']
 
-# Add timestamps
-datetime_start = datetime.fromtimestamp(body['beg_time'])
+## Create timestamps
+#values['timestamp'] = [datetime_start + timedelta(seconds=i*step_time) for i in range(0, len(values['temperature']))]
 
-# Parse sampling interval
-step_time = 1 # This default value should be overwritten, if there is only one sample
-if 'step_time' in payload:
-    step_time = payload['step_time']
-
-# Create timestamps
-values['timestamp'] = [datetime_start + timedelta(seconds=i*step_time) for i in range(0, len(values['temperature']))]
-
-# Create dataframe
-df = pd.DataFrame.from_dict(values)
-df = df.set_index('timestamp')
-df.head()
+## Create dataframe
+#df = pd.DataFrame.from_dict(values)
+#df = df.set_index('timestamp')
+#df.head()
 
 # Create payload
 URL = 'https://api.netatmo.com/oauth2/token'
