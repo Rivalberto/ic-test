@@ -26,11 +26,11 @@ MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:
 
 #SCOPE = 'read_station'
 MAC_station = '70:ee:50:64:49:34' # MAC address of the device looks like: '21:ff:31:69:2d:19'
-MAC_station_module = '02:00:00:65:33:f2'
+MAC_station_module_ext = '02:00:00:65:33:f2'
 
-date_start = datetime.now()-timedelta(days=1)
-date_start = int(date_start.replace(tzinfo=None).timestamp())
-date_end = int(datetime.now().timestamp())
+#date_start = datetime.now()-timedelta(days=1)
+#date_start = int(date_start.replace(tzinfo=None).timestamp())
+#date_end = int(datetime.now().timestamp())
 
 URL = 'https://api.netatmo.com/api/getmeasure'
 
@@ -42,7 +42,6 @@ headers = {
 
 # Create the payload for API call (homecoach)
 params={'device_id': MAC_homecoach,
-        #'module_id': MAC_homecoach,
         'scale': '1hour',
         'type': 'temperature,humidity,pressure,co2',
         #'date_begin': date_start,
@@ -56,13 +55,18 @@ params={'device_id': MAC_homecoach,
 # Make API call
 response = requests.get(url=URL, params=params, headers=headers)
 #print(response.content)
-st.write(response.content)
+#st.write(response.content)
 
-data = response.json()
+body = response.json()[body]
+values_homecoach = dict()
+for key in body:
+    values_homecoach["temperature"] = body[key][0]
+    values_homecoach["humidity"] = body[key][1]
+st.write(values_homecoach)
 
 # Create the payload for API call (station)
 params={'device_id': MAC_station,
-        'module_id': MAC_station_module,
+        'module_id': MAC_station_module_ext,
         'scale': '1hour',
         #'type': 'temperature',
         'type': 'temperature,humidity,pressure,co2',
@@ -76,21 +80,14 @@ params={'device_id': MAC_station,
 
 response = requests.get(url=URL, params=params, headers=headers)
 #print(response.content)
-st.write(response.content)
+#st.write(response.content)
 
 body = response.json()['body']
-st.write(body)
-
-values = dict()
+values_station_ext = dict()
 for key in body:
-    values["temperature"] = body[key][0]
-    values["humidity"] = body[key][1]
-    values["pressure"] = body[key][2]
-    values["co2"] = body[key][3]
-    #if not math.isnan(body[key][0]):
-    #st.write(body[key][0])
-
-st.write(values)
+    values_station_ext["temperature"] = body[key][0]
+    values_station_ext["humidity"] = body[key][1]
+st.write(values_station_ext)
 
 ## Add timestamps
 #datetime_start = datetime.fromtimestamp(body['beg_time'])
