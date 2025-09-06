@@ -85,7 +85,7 @@ for key in body:{
     #values['humidity'] = [val[1] for val in body[key]]
     #values['pressure'] = [val[2] for val in body[key]]
     #values['co2'] = [val[3] for val in body[key]]
-    st.write(val in body[key])
+    st.write(body[key][0])
 }
 
 ## Add timestamps
