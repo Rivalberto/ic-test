@@ -76,19 +76,14 @@ response = requests.get(url=URL, params=params, headers=headers)
 #print(response.content)
 st.write(response.content)
 
-data = response.json()
+body = response.json()['body'][0]
+st.write(body)
 
-## Parse response data
-#print(response.json())
-
-#body = response.json()['body'][0]
-
-#values = dict()
-#values['temperature'] = [val[0] for val in body['value']]
-#values['humidity'] = [val[1] for val in body['value']]
-#values['co2'] = [val[2] for val in body['value']]
-#values['pressure'] = [val[3] for val in body['value']]
-#values['noise'] = [val[4] for val in body['value']]
+values = dict()
+values['temperature'] = [val[0] for val in body['value']]
+values['humidity'] = [val[1] for val in body['value']]
+values['pressure'] = [val[2] for val in body['value']]
+values['co2'] = [val[3] for val in body['value']]
 
 ## Add timestamps
 #datetime_start = datetime.fromtimestamp(body['beg_time'])
