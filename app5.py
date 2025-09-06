@@ -304,7 +304,7 @@ def main():
     st.write(f"Pressione atmosferica: {p_atm:.1f} hPA")
     
     if not (0 <= rh_indoor <= 100 and 0 <= rh_outdoor <= 100):
-        st.error("Errore: L'umidità relativa deve essere tra 0 e 100%.")
+        st.warning("Errore: L'umidità relativa deve essere tra 0 e 100%.")
         return
 
     st.subheader("Dati calcolati")
@@ -350,9 +350,9 @@ def main():
             
     else:
         st.warning("Impossibile calcolare rapporto di miscela e umidità specifica a causa di errori precedenti.")
-    
-    st.warning("Impossi")
-    
+
+    st.info("Impossibi")
+               
     # Indicatore visivo testuale e colore per grafico
     st.subheader("Risultato")
     if ratio_value is not None:
@@ -364,13 +364,13 @@ def main():
         elif ratio_value < 1:
             verdict = "Chiudi"
             verdict_color = 'red'
-            st.warning("❌ L'aria esterna è più umida: aprendo le finestre aumenterai l'umidità interna.")
+            st.error("❌ L'aria esterna è più umida: aprendo le finestre aumenterai l'umidità interna.")
         else:
             verdict = "Uguale"
             verdict_color = 'blue'
             st.info("ℹ️ L'aria esterna e interna hanno la stessa umidità specifica.")
     else:
-        st.error("Impossibile calcolare il rapporto (w_indoor / w_outdoor) a causa di condizioni non valide o estreme.")
+        st.warning("Impossibile calcolare il rapporto (w_indoor / w_outdoor) a causa di condizioni non valide o estreme.")
 
     #except ValueError:
     #    st.write("\nErrore: Assicurati di inserire valori numerici validi per temperature, umidità e pressione.")
