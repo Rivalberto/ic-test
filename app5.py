@@ -295,7 +295,7 @@ def main():
     rh_outdoor = values_station_ext["humidity"]
     p_atm = values_homecoach["pressure"]
 
-    st.write("\n--- Dati letti dai sensori ---")
+    st.subheader("Dati letti dai sensori")
     
     st.write(f"Temperatura interna: {t_indoor:.1f} °C")
     st.write(f"Umidità relativa interna: {rh_indoor:.0f} %")
@@ -307,7 +307,7 @@ def main():
         st.write("Errore: L'umidità relativa deve essere tra 0 e 100%.")
         return
 
-    st.write("\n--- Dati calcolati ---")
+    st.subheader("Dati calcolati")
     
     # Calcola il punto di rugiada interno
     rh_indoor_decimal = rh_indoor / 100.0
@@ -353,7 +353,7 @@ def main():
 
 
     # Indicatore visivo testuale e colore per grafico
-    st.write("\n--- Risultato ---")
+    st.subheader("Risultato")
     if ratio_value is not None:
         st.write(f"Il rapporto (w_indoor / w_outdoor) è: {ratio_value:.4f}")
         if can_open:
