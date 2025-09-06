@@ -47,7 +47,8 @@ params={'device_id': MAC,
         'limit': '1',
         'optimize': 'false',
         'real_time': 'true'}
-print(params)
+#print(params)
+st.write(params)
 
 # Create the header for API call
 headers = {
@@ -57,7 +58,8 @@ headers = {
 
 # Make API call
 response = requests.get(url=URL, params=params, headers=headers)
-print(response.content)
+#print(response.content)
+st.write(response.content)
 
 ## Parse response data
 #print(response.json())
@@ -93,7 +95,8 @@ payload={'grant_type': 'refresh_token',
          'refresh_token': netatmo_refresh_token,
          'client_id': CLIENT_ID,
          'client_secret': CLIENT_SECRET}
-print(payload)
+#print(payload)
+st.write(payload)
 
 # Create headers
 headers = {
@@ -102,7 +105,8 @@ headers = {
 
 # Make API call
 response = requests.post(url=URL, data=payload, headers=headers)
-print(response.content)
+#print(response.content)
+st.write(response.content)
 
 ## Parse response data
 #netatmo_access_token = response.json()['access_token']
