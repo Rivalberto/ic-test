@@ -79,15 +79,14 @@ st.write(response.content)
 body = response.json()['body']
 st.write(body)
 
+values = dict()
 for key in body:{
+    values['temperature'] = [val[0] for val in body[key]]
+    values['humidity'] = [val[1] for val in body[key]]
+    values['pressure'] = [val[2] for val in body[key]]
+    values['co2'] = [val[3] for val in body[key]]
     st.write(key,":", body[key])
 }
-
-values = dict()
-values['temperature'] = [val[0] for val in body['value']]
-values['humidity'] = [val[1] for val in body['value']]
-values['pressure'] = [val[2] for val in body['value']]
-values['co2'] = [val[3] for val in body['value']]
 
 ## Add timestamps
 #datetime_start = datetime.fromtimestamp(body['beg_time'])
