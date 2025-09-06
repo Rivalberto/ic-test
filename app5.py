@@ -103,10 +103,10 @@ headers = {
     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
 }
 
-## Make API call
-#response = requests.post(url=URL, data=payload, headers=headers)
-##print(response.content)
-#st.write(response.content)
+# Make API call
+response = requests.post(url=URL, data=payload, headers=headers)
+#print(response.content)
+st.write(response.content)
 
 ## Parse response data
 #netatmo_access_token = response.json()['access_token']
