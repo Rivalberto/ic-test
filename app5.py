@@ -350,9 +350,7 @@ def main():
             
     else:
         st.warning("Impossibile calcolare rapporto di miscela e umidità specifica a causa di errori precedenti.")
-
-    st.info("Impossibi")
-               
+    
     # Indicatore visivo testuale e colore per grafico
     st.subheader("Risultato")
     if ratio_value is not None:
