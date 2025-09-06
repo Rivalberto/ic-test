@@ -283,6 +283,8 @@ def main():
     rh_outdoor = values_station_ext["humidity"]
     p_atm = values_homecoach["pressure"]
 
+    st.write("\n--- Dati letti dai sensori ---")
+    
     st.write(f"Temperatura interna: {t_indoor:.2f}°C")
     st.write(f"Umidità relativa interna: {rh_indoor:.2f}%")
     st.write(f"Temperatura esterna: {t_outdoor:.2f}°C")
@@ -293,6 +295,8 @@ def main():
         st.write("Errore: L'umidità relativa deve essere tra 0 e 100%.")
         return
 
+    st.write("\n--- Dati calcolati ---")
+    
     # Calcola il punto di rugiada interno
     rh_indoor_decimal = rh_indoor / 100.0
     td_indoor = calculate_dew_point(t_indoor, rh_indoor_decimal)
