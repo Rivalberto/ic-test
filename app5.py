@@ -356,17 +356,19 @@ def main():
     st.subheader("Risultato")
     if ratio_value is not None:
         st.write(f"Il rapporto (w_indoor / w_outdoor) è: {ratio_value:.4f}")
-        if can_open:
+        if ratio_value > 1:
             verdict = "Apri"
             verdict_color = 'green'
             st.success("✅ L'aria esterna è più secca: aprendo le finestre ridurrai l'umidità interna.")
-            #verdict = "Uguale"
-            #verdict_color = 'blue'
-            #st.info("ℹ️ L'aria esterna e interna hanno la stessa umidità specifica.")
         else:
-            verdict = "Chiudi"
-            verdict_color = 'red'
-            st.error("❌ L'aria esterna è più umida: aprendo le finestre aumenterai l'umidità interna.")
+            if ratio_value < 1:
+                verdict = "Chiudi"
+                verdict_color = 'red'
+                st.error("❌ L'aria esterna è più umida: aprendo le finestre aumenterai l'umidità interna.")
+            else:
+                #verdict = "Uguale"
+                #verdict_color = 'blue'
+                #st.info("ℹ️ L'aria esterna e interna hanno la stessa umidità specifica.")
     else:
         st.write("Impossibile calcolare il rapporto (w_indoor / w_outdoor) a causa di condizioni non valide o estreme.")
 
