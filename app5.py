@@ -176,7 +176,7 @@ def main():
             if 'Expiration' in row:
                 token_expiration = int(row['Expiration'])
             else:
-                token_expiration = int(datetime.now(tzinfo=timezone.utc).timestamp())-1
+                token_expiration = int(datetime.now(timezone.utc).timestamp())-1
             if 'Scope' in row:
                 token_scope = row['Scope']
             else:
@@ -187,7 +187,7 @@ def main():
 
     token_expiration = 0
     
-    if token_expiration < int(datetime.now(tzinfo=timezone.utc).timestamp()):
+    if token_expiration < int(datetime.now(timezone.utc).timestamp()):
 
         st.write("Requesting a new access token")
         
@@ -211,7 +211,7 @@ def main():
         # Parse response data
         netatmo_access_token = response.json()['access_token']
         netatmo_refresh_token = response.json()['refresh_token']
-        token_expiration = int(datetime.now(tzinfo=timezone.utc).timestamp())+min(int(response.json()['expires_in']), int(response.json()['expire_in']))-800
+        token_expiration = int(datetime.now(timezone.utc).timestamp())+min(int(response.json()['expires_in']), int(response.json()['expire_in']))-800
         token_scope = response.json()['scope']
         
         tokens = [
