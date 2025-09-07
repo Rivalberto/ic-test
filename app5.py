@@ -228,13 +228,9 @@ def main():
     MAC_station = '70:ee:50:64:49:34' # MAC address of the device looks like: '21:ff:31:69:2d:19'
     MAC_station_module_ext = '02:00:00:65:33:f2'
     
-    date_start = datetime.now()-timedelta(minutes=40)
-    #date_start = datetime.now()
-    date_start = int(date_start.replace(tzinfo=None).timestamp())
-    #date_end = datetime.now()+timedelta(minutes=10)
-    #date_end = datetime.now()
-    #date_end = int(date_end.replace(tzinfo=None).timestamp())
-    #date_end = int(datetime.now().timestamp())
+    date_start = datetime.now(timezone.utc)-timedelta(minutes=40)
+    #date_start = int(date_start.replace(tzinfo=None).timestamp())
+    date_start = int(date_start.timestamp())
     
     URL = 'https://api.netatmo.com/api/getmeasure'
     
@@ -268,7 +264,7 @@ def main():
         return
     values_homecoach = dict()
     for key in body:
-        values_homecoach["time"] = datetime.fromtimestamp(int(key)).time()
+        values_homecoach["time"] = datetime.fromtimestamp(int(key), tz=timezone.utc).time()
         values_homecoach["temperature"] = body[key][0]
         values_homecoach["humidity"] = body[key][1]
         values_homecoach["pressure"] = body[key][2]
@@ -305,7 +301,7 @@ def main():
         return
     values_station_ext = dict()
     for key in body:
-        values_station_ext["time"] = datetime.fromtimestamp(int(key)).time()
+        values_station_ext["time"] = datetime.fromtimestamp(int(key), tz=timezone.utc).time()
         values_station_ext["temperature"] = body[key][0]
         values_station_ext["humidity"] = body[key][1]
         #st.write(f"\nTemperature: {values_station_ext["temperature"]:.2f} °C")
@@ -337,7 +333,7 @@ def main():
         return
     values_station = dict()
     for key in body:
-        values_station["time"] = datetime.fromtimestamp(int(key)).time()
+        values_station["time"] = datetime.fromtimestamp(int(key), tz=timezone.utc).time()
         values_station["temperature"] = body[key][0]
         values_station["humidity"] = body[key][1]
         values_station["pressure"] = body[key][2]
