@@ -161,26 +161,17 @@ def main():
     # App credentials
     CLIENT_ID = '68bc5cc2dc51f3e3360f3d22' # Sometimes called app ID, looks like: '5989eA5B1AF3d8fc015d4215'
     CLIENT_SECRET = 'UeKLTCHiucBfiyBvVqmRN9iC9czdbmnMGcp' # looks like: 'BHtNLOTNSsbQFSqpCoGsQkOCjZJrothMwW'
-    
-    # These tokens are generated in the 'app' created on dev.netatmo.com
-    netatmo_access_token = '5e0f7e2dc5bdbd000c158377|8c67bc6f9def3ff2012ab2fb3038f5fd' # looks like: 'cde723283f7ab2d2786fb1f1|506be379de09b2ff5d3e25e56ebb8cdf'
-    netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|b8fc6cef23cbe46d45bb2ff666bf675f' # looks like: 'cde723283f7ab2d2786fb1f1|9977bb61decf0ed99db97b096e66fe77'
-    
-    field_names = ['Parameter', 'Value']
-    tokens = [
-        {'Parameter' : 'Access', 'Value' : netatmo_access_token},
-        {'Parameter' : 'Refresh', 'Value' : netatmo_refresh_token}
-    ]
-    
-    with open('tokens.csv', mode='w', newline='', encoding='utf-8') as file:
-        writer = csv.DictWriter(file, fieldnames=field_names)
-        writer.writeheader()
-        writer.writerows(tokens)
         
+    field_names = ['Access', 'Refresh']
+    
     with open('tokens.csv', mode='r', newline='', encoding='utf-8') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            st.write(f"Parameter: {row['Parameter']}, Value: {row['Value']}")
+        tokens = csv.DictReader(file)
+        netatmo_access_token = tokens['Access']
+        netatmo_refresh_token = tokens['Refresh']
+
+    # These tokens are generated in the 'app' created on dev.netatmo.com
+    #netatmo_access_token = '5e0f7e2dc5bdbd000c158377|8c67bc6f9def3ff2012ab2fb3038f5fd' # looks like: 'cde723283f7ab2d2786fb1f1|506be379de09b2ff5d3e25e56ebb8cdf'
+    #netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|b8fc6cef23cbe46d45bb2ff666bf675f' # looks like: 'cde723283f7ab2d2786fb1f1|9977bb61decf0ed99db97b096e66fe77'
     
     #SCOPE = 'read_homecoach'
     MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
@@ -189,7 +180,7 @@ def main():
     MAC_station = '70:ee:50:64:49:34' # MAC address of the device looks like: '21:ff:31:69:2d:19'
     MAC_station_module_ext = '02:00:00:65:33:f2'
     
-    date_start = datetime.now()-timedelta(minutes=90)
+    date_start = datetime.now()-timedelta(minutes=40)
     #date_start = datetime.now()
     date_start = int(date_start.replace(tzinfo=None).timestamp())
     #date_end = datetime.now()+timedelta(minutes=10)
@@ -286,8 +277,6 @@ def main():
              'refresh_token': netatmo_refresh_token,
              'client_id': CLIENT_ID,
              'client_secret': CLIENT_SECRET}
-    #print(payload)
-    #st.write(payload)
     
     # Create headers
     headers = {
@@ -295,13 +284,22 @@ def main():
     }
     
     ## Make API call
-    #response = requests.post(url=URL, data=payload, headers=headers)
-    ##print(response.content)
-    #st.write(response.content)
+    response = requests.post(url=URL, data=payload, headers=headers)
+    st.write(response.content)
     
-    ## Parse response data
-    #netatmo_access_token = response.json()['access_token']
-    #print(response.status_code)
+    # Parse response data
+    netatmo_access_token = response.json()['access_token']
+    netatmo_refresh_token = response.json()['refresh_token']
+    st.write(response.status_code)
+
+    tokens = [
+        {'Access' : netatmo_access_token, 'Refresh' : netatmo_refresh_token}
+    ]
+    
+    with open('tokens.csv', mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.DictWriter(file, fieldnames=field_names)
+            writer.writeheader()
+            writer.writerows(tokens)
     
     st.title("Calcolatore confronto rapporti di mescolanza e punto di rugiada")
     
