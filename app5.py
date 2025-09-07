@@ -221,6 +221,8 @@ def main():
                 writer.writeheader()
                 writer.writerows(tokens)
     
+    netatmo_access_token = 'dfgfd'
+    
     #SCOPE = 'read_homecoach'
     MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
     
@@ -261,7 +263,11 @@ def main():
     #print(response.content)
     #st.write(response.content)
     
-    body = response.json()['body']
+    if 'body' in response.json():
+        body = response.json()['body']
+    else:
+        st.error("Error with the data downloading")
+        return
     values_homecoach = dict()
     for key in body:
         values_homecoach["time"] = datetime.fromtimestamp(int(key)).time()
@@ -293,8 +299,12 @@ def main():
     response = requests.get(url=URL, params=params, headers=headers)
     #print(response.content)
     #st.write(response.content)
-    
-    body = response.json()['body']
+
+    if 'body' in response.json():
+        body = response.json()['body']
+    else:
+        st.error("Error with the data downloading")
+        return
     values_station_ext = dict()
     for key in body:
         values_station_ext["time"] = datetime.fromtimestamp(int(key)).time()
@@ -322,7 +332,11 @@ def main():
     #print(response.content)
     #st.write(response.content)
     
-    body = response.json()['body']
+    if 'body' in response.json():
+        body = response.json()['body']
+    else:
+        st.error("Error with the data downloading")
+        return
     values_station = dict()
     for key in body:
         values_station["time"] = datetime.fromtimestamp(int(key)).time()
