@@ -162,20 +162,20 @@ def main():
     CLIENT_ID = '68bc5cc2dc51f3e3360f3d22' # Sometimes called app ID, looks like: '5989eA5B1AF3d8fc015d4215'
     CLIENT_SECRET = 'UeKLTCHiucBfiyBvVqmRN9iC9czdbmnMGcp' # looks like: 'BHtNLOTNSsbQFSqpCoGsQkOCjZJrothMwW'
         
-    # These tokens are generated in the 'app' created on dev.netatmo.com
-    netatmo_access_token = '5e0f7e2dc5bdbd000c158377|0b34b0c4f45eaa23a43c1fbc9617722e'
-    netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|0cb2ec93f55bfb266bfb3f6209498d92'
-
     field_names = ['Access', 'Refresh']
     
-    tokens = [
-        {'Access' : netatmo_access_token, 'Refresh' : netatmo_refresh_token}
-    ]
+    # These tokens are generated in the 'app' created on dev.netatmo.com
+    #netatmo_access_token = '5e0f7e2dc5bdbd000c158377|0b34b0c4f45eaa23a43c1fbc9617722e'
+    #netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|0cb2ec93f55bfb266bfb3f6209498d92'
     
-    with open('tokens.csv', mode='w', newline='', encoding='utf-8') as file:
-            writer = csv.DictWriter(file, fieldnames=field_names)
-            writer.writeheader()
-            writer.writerows(tokens)
+    #tokens = [
+    #    {'Access' : netatmo_access_token, 'Refresh' : netatmo_refresh_token}
+    #]
+    
+    #with open('tokens.csv', mode='w', newline='', encoding='utf-8') as file:
+    #        writer = csv.DictWriter(file, fieldnames=field_names)
+    #        writer.writeheader()
+    #        writer.writerows(tokens)
     
     with open('tokens.csv', mode='r', newline='', encoding='utf-8') as file:
         tokens = csv.DictReader(file)
