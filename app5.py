@@ -187,7 +187,7 @@ def main():
     
     if token_expiration < int(datetime.now(timezone.utc).timestamp()):
 
-        #st.write("Requesting a new access token")
+        st.info("Requesting a new access token")
         
         # Create payload
         URL = 'https://api.netatmo.com/oauth2/token'
@@ -203,7 +203,7 @@ def main():
         
         ## Make API call
         response = requests.post(url=URL, data=payload, headers=headers)
-        st.write(response.content)
+        #st.write(response.content)
         #st.write(response.status_code)
         
         # Parse response data
@@ -255,7 +255,7 @@ def main():
     # Make API call
     response = requests.get(url=URL, params=params, headers=headers)
     #print(response.content)
-    #st.write(response.content)
+    st.write(response.content)
     
     if 'body' in response.json():
         body = response.json()['body']
@@ -370,7 +370,7 @@ def main():
     p_atm_tav = values_homecoach["pressure"]
     p_atm_cam = values_station["pressure"]
 
-    st.subheader(f"Dati letti dai sensori Taverna ({values_homecoach['time']}), Camera ({values_station['time']}), Esterno ({values_station_ext['time']})")
+    st.subheader(f"Dati letti dai sensori Taverna (UTC {values_homecoach['time']}), Camera (UTC {values_station['time']}), Esterno (UTC {values_station_ext['time']})")
     
     st.write(f"Temperatura taverna: {t_indoor_tav:.1f} °C")
     st.write(f"Umidità relativa taverna: {rh_indoor_tav:.0f} %")
