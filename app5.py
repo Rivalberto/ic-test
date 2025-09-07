@@ -245,7 +245,7 @@ def main():
     # Make API call
     response = requests.get(url=URL, params=params, headers=headers)
     #print(response.content)
-    st.write(response.content)
+    #st.write(response.content)
     
     body = response.json()['body']
     values_homecoach = dict()
