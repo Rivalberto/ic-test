@@ -168,23 +168,44 @@ def main():
     #netatmo_access_token = '5e0f7e2dc5bdbd000c158377|0b34b0c4f45eaa23a43c1fbc9617722e'
     #netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|0cb2ec93f55bfb266bfb3f6209498d92'
     
-    #tokens = [
-    #    {'Access' : netatmo_access_token, 'Refresh' : netatmo_refresh_token}
-    #]
-    
-    #with open('tokens.csv', mode='w', newline='', encoding='utf-8') as file:
-    #        writer = csv.DictWriter(file, fieldnames=field_names)
-    #        writer.writeheader()
-    #        writer.writerows(tokens)
-    
     with open('tokens.csv', mode='r', newline='', encoding='utf-8') as file:
         tokens = csv.DictReader(file)
         for row in tokens:
-            netatmo_access_token = row['Access']
+            #netatmo_access_token = row['Access']
             netatmo_refresh_token = row['Refresh']
 
-    st.write(netatmo_access_token)
+    #st.write(netatmo_access_token)
     st.write(netatmo_refresh_token)
+    
+    # Create payload
+    URL = 'https://api.netatmo.com/oauth2/token'
+    payload={'grant_type': 'refresh_token',
+             'refresh_token': netatmo_refresh_token,
+             'client_id': CLIENT_ID,
+             'client_secret': CLIENT_SECRET}
+    
+    # Create headers
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    }
+    
+    ## Make API call
+    response = requests.post(url=URL, data=payload, headers=headers)
+    st.write(response.content)
+    
+    # Parse response data
+    netatmo_access_token = response.json()['access_token']
+    netatmo_refresh_token = response.json()['refresh_token']
+    st.write(response.status_code)
+
+    tokens = [
+        {'Access' : netatmo_access_token, 'Refresh' : netatmo_refresh_token}
+    ]
+    
+    with open('tokens.csv', mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.DictWriter(file, fieldnames=field_names)
+            writer.writeheader()
+            writer.writerows(tokens)
     
     #SCOPE = 'read_homecoach'
     MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
@@ -283,36 +304,6 @@ def main():
     #df = pd.DataFrame.from_dict(values)
     #df = df.set_index('timestamp')
     #df.head()
-    
-    # Create payload
-    URL = 'https://api.netatmo.com/oauth2/token'
-    payload={'grant_type': 'refresh_token',
-             'refresh_token': netatmo_refresh_token,
-             'client_id': CLIENT_ID,
-             'client_secret': CLIENT_SECRET}
-    
-    # Create headers
-    headers = {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-    }
-    
-    ## Make API call
-    response = requests.post(url=URL, data=payload, headers=headers)
-    st.write(response.content)
-    
-    # Parse response data
-    netatmo_access_token = response.json()['access_token']
-    netatmo_refresh_token = response.json()['refresh_token']
-    st.write(response.status_code)
-
-    tokens = [
-        {'Access' : netatmo_access_token, 'Refresh' : netatmo_refresh_token}
-    ]
-    
-    with open('tokens.csv', mode='w', newline='', encoding='utf-8') as file:
-            writer = csv.DictWriter(file, fieldnames=field_names)
-            writer.writeheader()
-            writer.writerows(tokens)
     
     st.title("Calcolatore confronto rapporti di mescolanza e punto di rugiada")
     
