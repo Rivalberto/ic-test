@@ -177,7 +177,7 @@ def main():
     #st.write(netatmo_access_token)
     #st.write(netatmo_refresh_token)
 
-    refresh_token = False
+    refresh_token = True
     
     if refresh_token == True:
     
@@ -195,12 +195,11 @@ def main():
         
         ## Make API call
         response = requests.post(url=URL, data=payload, headers=headers)
-        #st.write(response.content)
+        st.write(response.content)
         
         # Parse response data
         netatmo_access_token = response.json()['access_token']
         netatmo_refresh_token = response.json()['refresh_token']
-        #st.write(response.status_code)
     
         tokens = [
             {'Access' : netatmo_access_token, 'Refresh' : netatmo_refresh_token}
@@ -210,6 +209,8 @@ def main():
                 writer = csv.DictWriter(file, fieldnames=field_names)
                 writer.writeheader()
                 writer.writerows(tokens)
+        
+        st.write(s"satus code {response.status_code}")
     
     #SCOPE = 'read_homecoach'
     MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
