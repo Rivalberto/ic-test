@@ -174,7 +174,7 @@ def main():
             netatmo_access_token = row['Access']
             netatmo_refresh_token = row['Refresh']
             if 'Expiration' in row:
-                token_expiration = row['Expiration']
+                token_expiration = int(row['Expiration'])
             else:
                 token_expiration = int(datetime.now().timestamp())-1
             if 'Scope' in row:
