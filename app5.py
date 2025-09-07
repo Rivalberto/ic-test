@@ -424,7 +424,7 @@ def main():
         w_indoor_cam = calculate_mixing_ratio_from_pv(pv_indoor_val_cam, p_atm_cam)
         q_indoor_cam = calculate_specific_humidity_from_mixing_ratio(w_indoor_cam)
         
-        w_outdoor = calculate_mixing_ratio_from_pv(pv_outdoor_val, p_atm)
+        w_outdoor = calculate_mixing_ratio_from_pv(pv_outdoor_val, p_atm_cam)
         q_outdoor = calculate_specific_humidity_from_mixing_ratio(w_outdoor)
         
         st.write(f"Umidità Specifica Taverna (q_indoor_tav): {q_indoor_tav:.2f} g/kg")
