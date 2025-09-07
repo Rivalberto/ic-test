@@ -187,7 +187,7 @@ def main():
     
     if token_expiration < int(datetime.now().timestamp()):
 
-        st.write("Requesting a new access token")
+        #st.write("Requesting a new access token")
         
         # Create payload
         URL = 'https://api.netatmo.com/oauth2/token'
@@ -275,7 +275,7 @@ def main():
     #st.write("Final values:")
     #st.write(values_homecoach)
     
-    # Create the payload for API call (station)
+    # Create the payload for API call (station module ext)
     params={'device_id': MAC_station,
             'module_id': MAC_station_module_ext,
             'scale': '30min',
@@ -298,6 +298,35 @@ def main():
     for key in body:
         values_station_ext["temperature"] = body[key][0]
         values_station_ext["humidity"] = body[key][1]
+        #st.write(f"\nTemperature: {values_station_ext["temperature"]:.2f} °C")
+        #st.write(f"\nHumidity: {values_station_ext["humidity"]:.2f} %")
+    #st.write("Final values:")
+    #st.write(values_station_ext)
+
+    # Create the payload for API call (station)
+    params={'device_id': MAC_station,
+            'scale': '30min',
+            #'type': 'temperature',
+            'type': 'temperature,humidity,pressure,co2',
+            'date_begin': date_start,
+            #'date_end': date_end,
+            #'limit': '1024',
+            'optimize': 'false',
+            'real_time': 'true'}
+    #print(params)
+    #st.write(params)
+    
+    response = requests.get(url=URL, params=params, headers=headers)
+    #print(response.content)
+    st.write(response.content)
+    
+    body = response.json()['body']
+    values_station_ext = dict()
+    for key in body:
+        values_station["temperature"] = body[key][0]
+        values_station["humidity"] = body[key][1]
+        values_station["pressure"] = body[key][2]
+        values_station["co2"] = body[key][3]
         #st.write(f"\nTemperature: {values_station_ext["temperature"]:.2f} °C")
         #st.write(f"\nHumidity: {values_station_ext["humidity"]:.2f} %")
     #st.write("Final values:")
