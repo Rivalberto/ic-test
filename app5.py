@@ -210,7 +210,7 @@ def main():
                 writer.writeheader()
                 writer.writerows(tokens)
         
-        st.write(s"satus code {response.status_code}")
+        st.write("satus code {response.status_code}")
     
     #SCOPE = 'read_homecoach'
     MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
