@@ -168,8 +168,8 @@ def main():
     
     field_names = ['Parameter', 'Value']
     tokens = [
-        ['Access', netatmo_access_token],
-        ['Refresh', netatmo_refresh_token]
+        {'Parameter' : 'Access', 'Value' : netatmo_access_token},
+        {'Parameter' : 'Refresh', 'Value' : netatmo_refresh_token}
     ]
     
     with open('tokens.csv', mode='w', newline='', encoding='utf-8') as file:
