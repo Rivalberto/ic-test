@@ -171,41 +171,45 @@ def main():
     with open('tokens.csv', mode='r', newline='', encoding='utf-8') as file:
         tokens = csv.DictReader(file)
         for row in tokens:
-            #netatmo_access_token = row['Access']
+            netatmo_access_token = row['Access']
             netatmo_refresh_token = row['Refresh']
 
     #st.write(netatmo_access_token)
     #st.write(netatmo_refresh_token)
-    
-    # Create payload
-    URL = 'https://api.netatmo.com/oauth2/token'
-    payload={'grant_type': 'refresh_token',
-             'refresh_token': netatmo_refresh_token,
-             'client_id': CLIENT_ID,
-             'client_secret': CLIENT_SECRET}
-    
-    # Create headers
-    headers = {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-    }
-    
-    ## Make API call
-    response = requests.post(url=URL, data=payload, headers=headers)
-    #st.write(response.content)
-    
-    # Parse response data
-    netatmo_access_token = response.json()['access_token']
-    netatmo_refresh_token = response.json()['refresh_token']
-    #st.write(response.status_code)
 
-    tokens = [
-        {'Access' : netatmo_access_token, 'Refresh' : netatmo_refresh_token}
-    ]
+    refresh_token = False
     
-    with open('tokens.csv', mode='w', newline='', encoding='utf-8') as file:
-            writer = csv.DictWriter(file, fieldnames=field_names)
-            writer.writeheader()
-            writer.writerows(tokens)
+    if refresh_token == True:
+    
+        # Create payload
+        URL = 'https://api.netatmo.com/oauth2/token'
+        payload={'grant_type': 'refresh_token',
+                 'refresh_token': netatmo_refresh_token,
+                 'client_id': CLIENT_ID,
+                 'client_secret': CLIENT_SECRET}
+        
+        # Create headers
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        }
+        
+        ## Make API call
+        response = requests.post(url=URL, data=payload, headers=headers)
+        #st.write(response.content)
+        
+        # Parse response data
+        netatmo_access_token = response.json()['access_token']
+        netatmo_refresh_token = response.json()['refresh_token']
+        #st.write(response.status_code)
+    
+        tokens = [
+            {'Access' : netatmo_access_token, 'Refresh' : netatmo_refresh_token}
+        ]
+        
+        with open('tokens.csv', mode='w', newline='', encoding='utf-8') as file:
+                writer = csv.DictWriter(file, fieldnames=field_names)
+                writer.writeheader()
+                writer.writerows(tokens)
     
     #SCOPE = 'read_homecoach'
     MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
