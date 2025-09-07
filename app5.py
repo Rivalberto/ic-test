@@ -163,8 +163,8 @@ def main():
     CLIENT_SECRET = 'UeKLTCHiucBfiyBvVqmRN9iC9czdbmnMGcp' # looks like: 'BHtNLOTNSsbQFSqpCoGsQkOCjZJrothMwW'
         
     # These tokens are generated in the 'app' created on dev.netatmo.com
-    netatmo_access_token = '5e0f7e2dc5bdbd000c158377|8c67bc6f9def3ff2012ab2fb3038f5fd' # looks like: 'cde723283f7ab2d2786fb1f1|506be379de09b2ff5d3e25e56ebb8cdf'
-    netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|b8fc6cef23cbe46d45bb2ff666bf675f' # looks like: 'cde723283f7ab2d2786fb1f1|9977bb61decf0ed99db97b096e66fe77'
+    netatmo_access_token = '5e0f7e2dc5bdbd000c158377|0b34b0c4f45eaa23a43c1fbc9617722e'
+    netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|0cb2ec93f55bfb266bfb3f6209498d92'
 
     field_names = ['Access', 'Refresh']
     
