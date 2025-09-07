@@ -4,7 +4,7 @@
 # - Register an app on https://dev.netatmo.com/ (Top right, 'My apps')
 # - Device: Home coach
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, tzinfo
 import requests
 import streamlit as st
 import math
