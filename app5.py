@@ -184,12 +184,10 @@ def main():
 
     #st.write(netatmo_access_token)
     #st.write(netatmo_refresh_token)
-
-    token_expiration = 0
     
     if token_expiration < int(datetime.now(timezone.utc).timestamp()):
 
-        st.write("Requesting a new access token")
+        #st.write("Requesting a new access token")
         
         # Create payload
         URL = 'https://api.netatmo.com/oauth2/token'
