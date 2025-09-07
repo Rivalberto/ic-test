@@ -175,7 +175,7 @@ def main():
             netatmo_refresh_token = row['Refresh']
 
     #st.write(netatmo_access_token)
-    st.write(netatmo_refresh_token)
+    #st.write(netatmo_refresh_token)
     
     # Create payload
     URL = 'https://api.netatmo.com/oauth2/token'
@@ -191,12 +191,12 @@ def main():
     
     ## Make API call
     response = requests.post(url=URL, data=payload, headers=headers)
-    st.write(response.content)
+    #st.write(response.content)
     
     # Parse response data
     netatmo_access_token = response.json()['access_token']
     netatmo_refresh_token = response.json()['refresh_token']
-    st.write(response.status_code)
+    #st.write(response.status_code)
 
     tokens = [
         {'Access' : netatmo_access_token, 'Refresh' : netatmo_refresh_token}
