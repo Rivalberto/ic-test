@@ -176,7 +176,7 @@ def main():
             if 'Expiration' in row:
                 token_expiration = int(row['Expiration'])
             else:
-                token_expiration = int(datetime.now().timestamp())-1
+                token_expiration = int(datetime.now(tzinfo=timezone.utc).timestamp())-1
             if 'Scope' in row:
                 token_scope = row['Scope']
             else:
@@ -184,10 +184,12 @@ def main():
 
     #st.write(netatmo_access_token)
     #st.write(netatmo_refresh_token)
-    
-    if token_expiration < int(datetime.now().timestamp()):
 
-        #st.write("Requesting a new access token")
+    token_expiration = 0
+    
+    if token_expiration < int(datetime.now(tzinfo=timezone.utc).timestamp()):
+
+        st.write("Requesting a new access token")
         
         # Create payload
         URL = 'https://api.netatmo.com/oauth2/token'
@@ -209,7 +211,7 @@ def main():
         # Parse response data
         netatmo_access_token = response.json()['access_token']
         netatmo_refresh_token = response.json()['refresh_token']
-        token_expiration = int(datetime.now().timestamp())+min(int(response.json()['expires_in']), int(response.json()['expire_in']))-800
+        token_expiration = int(datetime.now(tzinfo=timezone.utc).timestamp())+min(int(response.json()['expires_in']), int(response.json()['expire_in']))-800
         token_scope = response.json()['scope']
         
         tokens = [
@@ -220,8 +222,6 @@ def main():
                 writer = csv.DictWriter(file, fieldnames=field_names)
                 writer.writeheader()
                 writer.writerows(tokens)
-    
-    netatmo_access_token = 'dfgfd'
     
     #SCOPE = 'read_homecoach'
     MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
