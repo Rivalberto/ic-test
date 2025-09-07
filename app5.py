@@ -182,6 +182,9 @@ def main():
         for row in tokens:
             netatmo_access_token = row['Access']
             netatmo_refresh_token = row['Refresh']
+
+    st.write(netatmo_access_token)
+    st.write(netatmo_refresh_token)
     
     #SCOPE = 'read_homecoach'
     MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
@@ -221,7 +224,7 @@ def main():
     # Make API call
     response = requests.get(url=URL, params=params, headers=headers)
     #print(response.content)
-    #st.write(response.content)
+    st.write(response.content)
     
     body = response.json()['body']
     values_homecoach = dict()
