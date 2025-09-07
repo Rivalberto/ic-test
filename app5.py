@@ -264,7 +264,7 @@ def main():
     body = response.json()['body']
     values_homecoach = dict()
     for key in body:
-        values_homecoach["time"] = datetime.fromtimestamp(int(key))
+        values_homecoach["time"] = datetime.fromtimestamp(int(key)).time()
         values_homecoach["temperature"] = body[key][0]
         values_homecoach["humidity"] = body[key][1]
         values_homecoach["pressure"] = body[key][2]
@@ -297,7 +297,7 @@ def main():
     body = response.json()['body']
     values_station_ext = dict()
     for key in body:
-        values_station_ext["time"] = datetime.fromtimestamp(int(key))
+        values_station_ext["time"] = datetime.fromtimestamp(int(key)).time()
         values_station_ext["temperature"] = body[key][0]
         values_station_ext["humidity"] = body[key][1]
         #st.write(f"\nTemperature: {values_station_ext["temperature"]:.2f} °C")
@@ -353,69 +353,86 @@ def main():
     
     st.title("Calcolatore confronto rapporti di mescolanza e punto di rugiada")
     
-    t_indoor = values_homecoach["temperature"]
-    rh_indoor = values_homecoach["humidity"]
+    t_indoor_tav = values_homecoach["temperature"]
+    rh_indoor_tav = values_homecoach["humidity"]
     t_indoor_cam = values_station["temperature"]
     rh_indoor_cam = values_station["humidity"]
     t_outdoor = values_station_ext["temperature"]
     rh_outdoor = values_station_ext["humidity"]
     p_atm_tav = values_homecoach["pressure"]
-    p_atm = values_station["pressure"]
+    p_atm_cam = values_station["pressure"]
 
     st.subheader("Dati letti dai sensori")
     
-    st.write(f"Temperatura taverna ore {values_homecoach['time']}: {t_indoor:.1f} °C")
-    st.write(f"Umidità relativa taverna ore {values_homecoach['time']}: {rh_indoor:.0f} %")
+    st.write(f"Temperatura taverna ore {values_homecoach['time']}: {t_indoor_tav:.1f} °C")
+    st.write(f"Umidità relativa taverna ore {values_homecoach['time']}: {rh_indoor_tav:.0f} %")
     st.write(f"Temperatura camera ore {values_station['time']}: {t_indoor_cam:.1f} °C")
     st.write(f"Umidità relativa camera ore {values_station['time']}: {rh_indoor_cam:.0f} %")
     st.write(f"Temperatura esterna ore {values_station_ext['time']}: {t_outdoor:.1f} °C")
     st.write(f"Umidità relativa esterna ore {values_station_ext['time']}: {rh_outdoor:.0f} %")
-    st.write(f"Pressione atmosferica camera ore {values_station['time']}: {p_atm:.1f} hPA")
+    st.write(f"Pressione atmosferica camera ore {values_station['time']}: {p_atm_cam:.1f} hPA")
     st.write(f"Pressione atmosferica taverna ore {values_homecoach['time']}: {p_atm_tav:.1f} hPA")
     
-    if not (0 <= rh_indoor <= 100 and 0 <= rh_outdoor <= 100):
-        st.warning("Errore: L'umidità relativa deve essere tra 0 e 100%.")
-        return
+    #if not (0 <= rh_indoor <= 100 and 0 <= rh_outdoor <= 100):
+    #    st.warning("Errore: L'umidità relativa deve essere tra 0 e 100%.")
+    #    return
 
     st.subheader("Dati calcolati")
     
-    # Calcola il punto di rugiada interno
-    rh_indoor_decimal = rh_indoor / 100.0
-    td_indoor = calculate_dew_point(t_indoor, rh_indoor_decimal)
-    st.write(f"Punto di rugiada interno calcolato: {td_indoor:.2f} °C")
+    # Calcola il punto di rugiada taverna
+    rh_indoor_decimal_tav = rh_indoor_tav / 100.0
+    td_indoor_tav = calculate_dew_point(t_indoor_tav, rh_indoor_decimal_tav)
+    st.write(f"Punto di rugiada taverna calcolato: {td_indoor_tav:.2f} °C")
+
+    # Calcola il punto di rugiada camera
+    rh_indoor_decimal_cam = rh_indoor_cam / 100.0
+    td_indoor_cam = calculate_dew_point(t_indoor_cam, rh_indoor_decimal_cam)
+    st.write(f"Punto di rugiada camera calcolato: {td_indoor_cam:.2f} °C")
 
     # Calcola il punto di rugiada esterno
     rh_outdoor_decimal = rh_outdoor / 100.0
     td_outdoor = calculate_dew_point(t_outdoor, rh_outdoor_decimal)
     st.write(f"Punto di rugiada esterno calcolato: {td_outdoor:.2f} °C")
     
-    can_open, ratio_value, pv_indoor_val, pv_outdoor_val = should_open_windows_based_on_TRH(
-            t_indoor, rh_indoor,
+    can_open_tav, ratio_value_tav, pv_indoor_val_tav, pv_outdoor_val = should_open_windows_based_on_TRH(
+            t_indoor_tav, rh_indoor_tav,
             t_outdoor, rh_outdoor,
-            p_atm # Passa la pressione inserita o predefinita
+            p_atm
+    )
+    
+    can_open_cam, ratio_value_cam, pv_indoor_val_cam, pv_outdoor_val = should_open_windows_based_on_TRH(
+            t_indoor_cam, rh_indoor_cam,
+            t_outdoor, rh_outdoor,
+            p_atm
     )
     
     # Calcola e stampa l'umidità assoluta (densità)
-    if pv_indoor_val is not None and pv_outdoor_val is not None:
-        abs_hum_indoor = calculate_absolute_humidity_density(pv_indoor_val, t_indoor)
+    if pv_indoor_val_tav is not None and pv_indoor_val_cam is not None and pv_outdoor_val is not None:
+        abs_hum_indoor_tav = calculate_absolute_humidity_density(pv_indoor_val_tav, t_indoor_tav)
+        abs_hum_indoor_cam = calculate_absolute_humidity_density(pv_indoor_val_cam, t_indoor_cam)
         abs_hum_outdoor = calculate_absolute_humidity_density(pv_outdoor_val, t_outdoor)
-        st.write(f"Umidità Assoluta Interna: {abs_hum_indoor:.2f} g/m³")
+        st.write(f"Umidità Assoluta Taverna: {abs_hum_indoor_tav:.2f} g/m³")
+        st.write(f"Umidità Assoluta Camera: {abs_hum_indoor_cam:.2f} g/m³")
         st.write(f"Umidità Assoluta Esterna: {abs_hum_outdoor:.2f} g/m³")
     else:
         st.warning("Impossibile calcolare l'umidità assoluta a causa di errori precedenti.")
 
     # Calcola e stampa il rapporto di miscela (w) e l'umidità specifica (q)
-    if pv_indoor_val is not None and pv_outdoor_val is not None:
-        w_indoor = calculate_mixing_ratio_from_pv(pv_indoor_val, p_atm)
-        q_indoor = calculate_specific_humidity_from_mixing_ratio(w_indoor)
+    if pv_indoor_val_tav is not None and pv_indoor_val_cam is not None and pv_outdoor_val is not None:
+        w_indoor_tav = calculate_mixing_ratio_from_pv(pv_indoor_val_tav, p_atm_tav)
+        q_indoor_tav = calculate_specific_humidity_from_mixing_ratio(w_indoor_tav)
+        w_indoor_cam = calculate_mixing_ratio_from_pv(pv_indoor_val_cam, p_atm_cam)
+        q_indoor_cam = calculate_specific_humidity_from_mixing_ratio(w_indoor_cam)
         
         w_outdoor = calculate_mixing_ratio_from_pv(pv_outdoor_val, p_atm)
         q_outdoor = calculate_specific_humidity_from_mixing_ratio(w_outdoor)
         
-        st.write(f"Umidità Specifica Interna (q_indoor): {q_indoor:.2f} g/kg")
+        st.write(f"Umidità Specifica Taverna (q_indoor_tav): {q_indoor_tav:.2f} g/kg")
+        st.write(f"Umidità Specifica Camera (q_indoor_cam): {q_indoor_cam:.2f} g/kg")
         st.write(f"Umidità Specifica Esterna (q_outdoor): {q_outdoor:.2f} g/kg")
             
-        st.write(f"Rapporto di Miscela Interno (w_indoor): {w_indoor:.2f} g/kg")
+        st.write(f"Rapporto di Miscela Taverna (w_indoor_tav): {w_indoor_tav:.2f} g/kg")
+        st.write(f"Rapporto di Miscela Camera (w_indoor_cam): {w_indoor_cam:.2f} g/kg")
         st.write(f"Rapporto di Miscela Esterno (w_outdoor): {w_outdoor:.2f} g/kg")
             
     else:
@@ -423,20 +440,37 @@ def main():
     
     # Indicatore visivo testuale e colore per grafico
     st.subheader("Risultato")
-    if ratio_value is not None:
-        st.write(f"Il rapporto (w_indoor / w_outdoor) è: {ratio_value:.4f}")
-        if ratio_value > 1:
+    if ratio_value_tav is not None:
+        st.write(f"Il rapporto (w_indoor_tav / w_outdoor) è: {ratio_value_tav:.4f}")
+        if ratio_value_tav > 1:
             verdict = "Apri"
             verdict_color = 'green'
-            st.success("✅ L'aria esterna è più secca: aprendo le finestre ridurrai l'umidità interna.")
-        elif ratio_value < 1:
+            st.success("✅ L'aria esterna è più secca: aprendo le finestre della taverna ridurrai l'umidità interna.")
+        elif ratio_value_tav < 1:
             verdict = "Chiudi"
             verdict_color = 'red'
-            st.error("❌ L'aria esterna è più umida: aprendo le finestre aumenterai l'umidità interna.")
+            st.error("❌ L'aria esterna è più umida: aprendo le finestre della taverna aumenterai l'umidità interna.")
         else:
             verdict = "Uguale"
             verdict_color = 'blue'
-            st.info("ℹ️ L'aria esterna e interna hanno la stessa umidità specifica.")
+            st.info("ℹ️ L'aria esterna e della taverna hanno la stessa umidità specifica.")
+    else:
+        st.warning("Impossibile calcolare il rapporto (w_indoor / w_outdoor) a causa di condizioni non valide o estreme.")
+
+    if ratio_value_cam is not None:
+        st.write(f"Il rapporto (w_indoor_cam / w_outdoor) è: {ratio_value_cam:.4f}")
+        if ratio_value_cam > 1:
+            verdict = "Apri"
+            verdict_color = 'green'
+            st.success("✅ L'aria esterna è più secca: aprendo le finestre della camera ridurrai l'umidità interna.")
+        elif ratio_value_cam < 1:
+            verdict = "Chiudi"
+            verdict_color = 'red'
+            st.error("❌ L'aria esterna è più umida: aprendo le finestre della camera aumenterai l'umidità interna.")
+        else:
+            verdict = "Uguale"
+            verdict_color = 'blue'
+            st.info("ℹ️ L'aria esterna e della camera hanno la stessa umidità specifica.")
     else:
         st.warning("Impossibile calcolare il rapporto (w_indoor / w_outdoor) a causa di condizioni non valide o estreme.")
 
