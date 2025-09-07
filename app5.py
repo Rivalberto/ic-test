@@ -397,13 +397,13 @@ def main():
     can_open_tav, ratio_value_tav, pv_indoor_val_tav, pv_outdoor_val = should_open_windows_based_on_TRH(
             t_indoor_tav, rh_indoor_tav,
             t_outdoor, rh_outdoor,
-            p_atm
+            p_atm_cam # Usare p_atm ext???
     )
     
     can_open_cam, ratio_value_cam, pv_indoor_val_cam, pv_outdoor_val = should_open_windows_based_on_TRH(
             t_indoor_cam, rh_indoor_cam,
             t_outdoor, rh_outdoor,
-            p_atm
+            p_atm_cam # Usare p_atm ext???
     )
     
     # Calcola e stampa l'umidità assoluta (densità)
