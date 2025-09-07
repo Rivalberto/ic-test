@@ -162,7 +162,7 @@ def main():
     CLIENT_ID = '68bc5cc2dc51f3e3360f3d22' # Sometimes called app ID, looks like: '5989eA5B1AF3d8fc015d4215'
     CLIENT_SECRET = 'UeKLTCHiucBfiyBvVqmRN9iC9czdbmnMGcp' # looks like: 'BHtNLOTNSsbQFSqpCoGsQkOCjZJrothMwW'
         
-    field_names = ['Access', 'Refresh']
+    field_names = ['Access', 'Refresh', 'Expiration', 'Scope']
     
     # These tokens are generated in the 'app' created on dev.netatmo.com
     #netatmo_access_token = '5e0f7e2dc5bdbd000c158377|0b34b0c4f45eaa23a43c1fbc9617722e'
@@ -173,14 +173,22 @@ def main():
         for row in tokens:
             netatmo_access_token = row['Access']
             netatmo_refresh_token = row['Refresh']
+            if 'Expiration' in row:
+                token_expiration = row['Expiration']
+            else:
+                token_expiration = int(datetime.now().timestamp())-1
+            if 'Scope' in row:
+                token_scope = row['Scope']
+            else:
+                token_scope = ["read_station","read_homecoach"]
 
     #st.write(netatmo_access_token)
     #st.write(netatmo_refresh_token)
+    
+    if token_expiration < int(datetime.now().timestamp()):
 
-    refresh_token = True
-    
-    if refresh_token == True:
-    
+        st.write("Requesting a new access token")
+        
         # Create payload
         URL = 'https://api.netatmo.com/oauth2/token'
         payload={'grant_type': 'refresh_token',
@@ -196,21 +204,22 @@ def main():
         ## Make API call
         response = requests.post(url=URL, data=payload, headers=headers)
         st.write(response.content)
+        #st.write(response.status_code)
         
         # Parse response data
         netatmo_access_token = response.json()['access_token']
         netatmo_refresh_token = response.json()['refresh_token']
-    
+        token_expiration = int(datetime.now().timestamp())+min(int(response.json()['expires_in']), int(response.json()['expire_in']))-800
+        token_scope = response.json()['scope']
+        
         tokens = [
-            {'Access' : netatmo_access_token, 'Refresh' : netatmo_refresh_token}
+            {'Access' : netatmo_access_token, 'Refresh' : netatmo_refresh_token, 'Expiration' : token_expiration, 'Scope' : token_scope}
         ]
         
         with open('tokens.csv', mode='w', newline='', encoding='utf-8') as file:
                 writer = csv.DictWriter(file, fieldnames=field_names)
                 writer.writeheader()
                 writer.writerows(tokens)
-        
-        st.write("satus code {response.status_code}")
     
     #SCOPE = 'read_homecoach'
     MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
