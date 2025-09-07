@@ -362,16 +362,16 @@ def main():
     p_atm_tav = values_homecoach["pressure"]
     p_atm_cam = values_station["pressure"]
 
-    st.subheader("Dati letti dai sensori")
+    st.subheader(f"Dati letti dai sensori Taverna ({values_homecoach['time']}), Camera ({values_station['time']}), Esterno ({values_station_ext['time']})")
     
-    st.write(f"Temperatura taverna ore {values_homecoach['time']}: {t_indoor_tav:.1f} °C")
-    st.write(f"Umidità relativa taverna ore {values_homecoach['time']}: {rh_indoor_tav:.0f} %")
-    st.write(f"Temperatura camera ore {values_station['time']}: {t_indoor_cam:.1f} °C")
-    st.write(f"Umidità relativa camera ore {values_station['time']}: {rh_indoor_cam:.0f} %")
-    st.write(f"Temperatura esterna ore {values_station_ext['time']}: {t_outdoor:.1f} °C")
-    st.write(f"Umidità relativa esterna ore {values_station_ext['time']}: {rh_outdoor:.0f} %")
-    st.write(f"Pressione atmosferica camera ore {values_station['time']}: {p_atm_cam:.1f} hPA")
-    st.write(f"Pressione atmosferica taverna ore {values_homecoach['time']}: {p_atm_tav:.1f} hPA")
+    st.write(f"Temperatura taverna: {t_indoor_tav:.1f} °C")
+    st.write(f"Umidità relativa taverna: {rh_indoor_tav:.0f} %")
+    st.write(f"Temperatura camera: {t_indoor_cam:.1f} °C")
+    st.write(f"Umidità relativa camera: {rh_indoor_cam:.0f} %")
+    st.write(f"Temperatura esterna: {t_outdoor:.1f} °C")
+    st.write(f"Umidità relativa esterna: {rh_outdoor:.0f} %")
+    st.write(f"Pressione atmosferica camera: {p_atm_cam:.1f} hPA")
+    st.write(f"Pressione atmosferica taverna: {p_atm_tav:.1f} hPA")
     
     #if not (0 <= rh_indoor <= 100 and 0 <= rh_outdoor <= 100):
     #    st.warning("Errore: L'umidità relativa deve essere tra 0 e 100%.")
@@ -441,7 +441,7 @@ def main():
     # Indicatore visivo testuale e colore per grafico
     st.subheader("Risultato")
     if ratio_value_tav is not None:
-        st.write(f"Il rapporto (w_indoor_tav / w_outdoor) è: {ratio_value_tav:.4f}")
+        st.write(f"Per la taverna, il rapporto (w_indoor_tav / w_outdoor) è: {ratio_value_tav:.4f}")
         if ratio_value_tav > 1:
             verdict = "Apri"
             verdict_color = 'green'
@@ -458,7 +458,7 @@ def main():
         st.warning("Impossibile calcolare il rapporto (w_indoor / w_outdoor) a causa di condizioni non valide o estreme.")
 
     if ratio_value_cam is not None:
-        st.write(f"Il rapporto (w_indoor_cam / w_outdoor) è: {ratio_value_cam:.4f}")
+        st.write(f"Per la camera, il rapporto (w_indoor_cam / w_outdoor) è: {ratio_value_cam:.4f}")
         if ratio_value_cam > 1:
             verdict = "Apri"
             verdict_color = 'green'
