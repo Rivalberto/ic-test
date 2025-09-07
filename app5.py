@@ -167,8 +167,8 @@ def main():
     with open('tokens.csv', mode='r', newline='', encoding='utf-8') as file:
         tokens = csv.DictReader(file)
         for row in tokens:
-        netatmo_access_token = row['Access']
-        netatmo_refresh_token = row['Refresh']
+            netatmo_access_token = row['Access']
+            netatmo_refresh_token = row['Refresh']
 
     # These tokens are generated in the 'app' created on dev.netatmo.com
     #netatmo_access_token = '5e0f7e2dc5bdbd000c158377|8c67bc6f9def3ff2012ab2fb3038f5fd' # looks like: 'cde723283f7ab2d2786fb1f1|506be379de09b2ff5d3e25e56ebb8cdf'
