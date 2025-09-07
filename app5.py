@@ -264,6 +264,7 @@ def main():
     body = response.json()['body']
     values_homecoach = dict()
     for key in body:
+        values_homecoach["time"] = datetime.fromtimestamp(int(key))
         values_homecoach["temperature"] = body[key][0]
         values_homecoach["humidity"] = body[key][1]
         values_homecoach["pressure"] = body[key][2]
@@ -296,6 +297,7 @@ def main():
     body = response.json()['body']
     values_station_ext = dict()
     for key in body:
+        values_station_ext["time"] = datetime.fromtimestamp(int(key))
         values_station_ext["temperature"] = body[key][0]
         values_station_ext["humidity"] = body[key][1]
         #st.write(f"\nTemperature: {values_station_ext["temperature"]:.2f} °C")
@@ -321,8 +323,9 @@ def main():
     st.write(response.content)
     
     body = response.json()['body']
-    values_station_ext = dict()
+    values_station = dict()
     for key in body:
+        values_station["time"] = datetime.fromtimestamp(int(key))
         values_station["temperature"] = body[key][0]
         values_station["humidity"] = body[key][1]
         values_station["pressure"] = body[key][2]
@@ -352,17 +355,23 @@ def main():
     
     t_indoor = values_homecoach["temperature"]
     rh_indoor = values_homecoach["humidity"]
+    t_indoor_cam = values_station["temperature"]
+    rh_indoor_cam = values_station["humidity"]
     t_outdoor = values_station_ext["temperature"]
     rh_outdoor = values_station_ext["humidity"]
-    p_atm = values_homecoach["pressure"]
+    p_atm_tav = values_homecoach["pressure"]
+    p_atm = values_station["pressure"]
 
     st.subheader("Dati letti dai sensori")
     
-    st.write(f"Temperatura interna: {t_indoor:.1f} °C")
-    st.write(f"Umidità relativa interna: {rh_indoor:.0f} %")
-    st.write(f"Temperatura esterna: {t_outdoor:.1f} °C")
-    st.write(f"Umidità relativa esterna: {rh_outdoor:.0f} %")
-    st.write(f"Pressione atmosferica: {p_atm:.1f} hPA")
+    st.write(f"Temperatura taverna ore {values_homecoach['time']}: {t_indoor:.1f} °C")
+    st.write(f"Umidità relativa taverna ore {values_homecoach['time']}: {rh_indoor:.0f} %")
+    st.write(f"Temperatura camera ore {values_station['time']}: {t_indoor_cam:.1f} °C")
+    st.write(f"Umidità relativa camera ore {values_station['time']}: {rh_indoor_cam:.0f} %")
+    st.write(f"Temperatura esterna ore {values_station_ext['time']}: {t_outdoor:.1f} °C")
+    st.write(f"Umidità relativa esterna ore {values_station_ext['time']}: {rh_outdoor:.0f} %")
+    st.write(f"Pressione atmosferica camera ore {values_station['time']}: {p_atm:.1f} hPA")
+    st.write(f"Pressione atmosferica taverna ore {values_homecoach['time']}: {p_atm_tav:.1f} hPA")
     
     if not (0 <= rh_indoor <= 100 and 0 <= rh_outdoor <= 100):
         st.warning("Errore: L'umidità relativa deve essere tra 0 e 100%.")
