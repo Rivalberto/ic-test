@@ -255,7 +255,7 @@ def main():
     # Make API call
     response = requests.get(url=URL, params=params, headers=headers)
     #print(response.content)
-    st.write(response.content)
+    #st.write(response.content)
     
     if 'body' in response.json():
         body = response.json()['body']
