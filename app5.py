@@ -325,7 +325,7 @@ def main():
     body = response.json()['body']
     values_station = dict()
     for key in body:
-        values_station["time"] = datetime.fromtimestamp(int(key)).time
+        values_station["time"] = datetime.fromtimestamp(int(key)).time()
         values_station["temperature"] = body[key][0]
         values_station["humidity"] = body[key][1]
         values_station["pressure"] = body[key][2]
