@@ -187,7 +187,7 @@ def main():
     #if sha:
     #    inputdata["sha"] = str(sha)
 
-    github_user = ""Rivalberto"
+    github_user = "Rivalberto"
     github_token = "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"
 
     URL = "https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv"
