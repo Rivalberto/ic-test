@@ -172,10 +172,7 @@ def main():
     token_expiration = -10
     token_scope = ["read_station", "read_homecoach"]
 
-    df = pd.DataFrame({'Access': netatmo_access_token,
-               'Refresh': netatmo_refresh_token,
-               'Expiration': token_expiration},
-                'Scope': token_scope)
+    df = pd.DataFrame({'Access': netatmo_access_token, 'Refresh': netatmo_refresh_token, 'Expiration': token_expiration, 'Scope': token_scope})
     #df.to_csv('out.csv', index=False)
     #st.write(df)    
 
