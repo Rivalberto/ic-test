@@ -191,8 +191,10 @@ def main():
     github_token = "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"
 
     URL = "https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv"
-    rPut = requests.put(URL, auth=(github_user,github_token), data = json.dumps(inputdata))
+    response = requests.put(URL, auth=(github_user,github_token), data = json.dumps(inputdata))
 
+    st.write(response.content.decode())
+    
     exit()
 
     URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
