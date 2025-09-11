@@ -175,31 +175,42 @@ def main():
     url = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
     response = requests.get(url)
     if response.status_code == 200:
-        df = pd.read_csv(StringIO(response.text))
-        st.write(df)
+        tokens = pd.read_csv(StringIO(response.text))
     else:
-        df = pd.DataFrame({'Access': netatmo_access_token,
-                   'Refresh': netatmo_refresh_token,
-                   'Expiration': access_token_exp})
+        #df = pd.DataFrame({'Access': netatmo_access_token,
+        #           'Refresh': netatmo_refresh_token,
+        #           'Expiration': access_token_exp})
         #df.to_csv('out.csv', index=False)
-        st.write(df)
-        #st.error("Failed to load data from GitHub.")
+        #st.write(df)
+        st.error("Failed to load data from GitHub.")
+        exit()
     
-    exit()
-        
-    with open('tokens.csv', mode='r', newline='', encoding='utf-8') as file:
-        tokens = csv.DictReader(file)
-        for row in tokens:
-            netatmo_access_token = row['Access']
-            netatmo_refresh_token = row['Refresh']
-            if 'Expiration' in row:
-                token_expiration = int(row['Expiration'])
-            else:
-                token_expiration = int(datetime.now(timezone.utc).timestamp())-1
-            if 'Scope' in row:
-                token_scope = row['Scope']
-            else:
-                token_scope = ["read_station","read_homecoach"]
+    #tokens = csv.DictReader(file)
+    for row in tokens:
+        netatmo_access_token = row['Access']
+        netatmo_refresh_token = row['Refresh']
+        if 'Expiration' in row:
+            token_expiration = int(row['Expiration'])
+        else:
+            token_expiration = int(datetime.now(timezone.utc).timestamp())-1
+        if 'Scope' in row:
+            token_scope = row['Scope']
+        else:
+            token_scope = ["read_station","read_homecoach"]
+
+    #with open('tokens.csv', mode='r', newline='', encoding='utf-8') as file:
+    #    tokens = csv.DictReader(file)
+    #    for row in tokens:
+    #        netatmo_access_token = row['Access']
+    #        netatmo_refresh_token = row['Refresh']
+    #        if 'Expiration' in row:
+    #            token_expiration = int(row['Expiration'])
+    #        else:
+    #            token_expiration = int(datetime.now(timezone.utc).timestamp())-1
+    #        if 'Scope' in row:
+    #            token_scope = row['Scope']
+    #        else:
+    #            token_scope = ["read_station","read_homecoach"]
 
     #st.write(netatmo_access_token)
     #st.write(netatmo_refresh_token)
