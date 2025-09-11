@@ -168,20 +168,38 @@ def main():
     
     # These tokens are generated in the 'app' created on dev.netatmo.com
     netatmo_access_token = 'no_valid'
-    access_token_exp = 0
     netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|0cb2ec93f55bfb266bfb3f6209498d92'
-    refresh_token_exp = 10800
-    
-    url = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
-    response = requests.get(url)
+    token_expiration = -10
+    token_scope = ["read_station", "read_homecoach"]
+
+    df = pd.DataFrame({'Access': netatmo_access_token,
+               'Refresh': netatmo_refresh_token,
+               'Expiration': token_expiration},
+                'Scope' : token_scope)
+    #df.to_csv('out.csv', index=False)
+    #st.write(df)    
+
+    inputdata = {}
+    inputdata["path"] = "tokens_test.csv"
+    inputdata["branch"] = "main"
+    inputdata["message"] = "Automated update " + str(datetime.datetime.now())
+    inputdata["content"] = "ciao"
+    #if sha:
+    #    inputdata["sha"] = str(sha)
+
+    github_user = ""Rivalberto"
+    github_token = "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"
+
+    URL = "https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv"
+    rPut = requests.put(URL, auth=(github_user,github_token), data = json.dumps(inputdata))
+
+    exit()
+
+    URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
+    response = requests.get(URL)
     if response.status_code == 200:
         tokens = pd.read_csv(StringIO(response.text))
     else:
-        #df = pd.DataFrame({'Access': netatmo_access_token,
-        #           'Refresh': netatmo_refresh_token,
-        #           'Expiration': access_token_exp})
-        #df.to_csv('out.csv', index=False)
-        #st.write(df)
         st.error("Failed to load data from GitHub.")
         exit()
     
