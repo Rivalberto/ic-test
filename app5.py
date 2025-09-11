@@ -175,8 +175,8 @@ def main():
     url = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
     response = requests.get(url)
     if response.status_code == 200:
-        pd.read_csv(StringIO(response.text))
-        st.write(pd)
+        df = pd.read_csv(StringIO(response.text))
+        st.write(df)
     else:
         df = pd.DataFrame({'Access': netatmo_access_token,
                    'Refresh': netatmo_refresh_token,
