@@ -172,7 +172,7 @@ def main():
     netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|0cb2ec93f55bfb266bfb3f6209498d92'
     refresh_token_exp = 10800
     
-    url = 'https://raw.githubusercontent.com/[username]/[repository]/main/[file].csv'
+    url = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
     response = requests.get(url)
     if response.status_code == 200:
         pd.read_csv(StringIO(response.text))
@@ -181,7 +181,8 @@ def main():
         df = pd.DataFrame({'Access': netatmo_access_token,
                    'Refresh': netatmo_refresh_token,
                    'Expiration': access_token_exp})
-        df.to_csv('out.csv', index=False)
+        #df.to_csv('out.csv', index=False)
+        st.write(df)
         #st.error("Failed to load data from GitHub.")
     
     exit()
