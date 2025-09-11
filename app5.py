@@ -179,7 +179,7 @@ def main():
     inputdata = {}
     inputdata["path"] = "tokens_test.csv"
     inputdata["branch"] = "main"
-    inputdata["message"] = "Automated update " + str(datetime.datetime.now())
+    inputdata["message"] = "Automated update " + str(datetime.now())
     inputdata["content"] = "ciao"
     #if sha:
     #    inputdata["sha"] = str(sha)
