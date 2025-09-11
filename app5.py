@@ -175,7 +175,7 @@ def main():
     df = pd.DataFrame({'Access': netatmo_access_token,
                'Refresh': netatmo_refresh_token,
                'Expiration': token_expiration},
-                'Scope' : token_scope)
+                'Scope': token_scope)
     #df.to_csv('out.csv', index=False)
     #st.write(df)    
 
