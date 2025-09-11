@@ -10,6 +10,8 @@ import streamlit as st
 import math
 import numpy as np
 import csv
+import pandas as pd
+from io import StringIO
 
 def calculate_A_T(temperature_celsius):
     """
@@ -165,10 +167,26 @@ def main():
     field_names = ['Access', 'Refresh', 'Expiration', 'Scope']
     
     # These tokens are generated in the 'app' created on dev.netatmo.com
-    #netatmo_access_token = '5e0f7e2dc5bdbd000c158377|0b34b0c4f45eaa23a43c1fbc9617722e'
-    #netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|0cb2ec93f55bfb266bfb3f6209498d92'
+    netatmo_access_token = 'no_valid'
+    access_token_exp = 0
+    netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|0cb2ec93f55bfb266bfb3f6209498d92'
+    refresh_token_exp = 10800
     
-    with open('tokens.csv', mode='r', newline='', encoding='utf-8') as file:
+    url = 'https://raw.githubusercontent.com/[username]/[repository]/main/[file].csv'
+    response = requests.get(url)
+    if response.status_code == 200:
+        pd.read_csv(StringIO(response.text))
+        st.write(pd)
+    else:
+        df = pd.DataFrame({'Access': netatmo_access_token,
+                   'Refresh': netatmo_refresh_token,
+                   'Expiration': access_token_exp})
+        df.to_csv('out.csv', index=False)
+        #st.error("Failed to load data from GitHub.")
+    
+    exit()
+        
+    #with open('tokens.csv', mode='r', newline='', encoding='utf-8') as file:
         tokens = csv.DictReader(file)
         for row in tokens:
             netatmo_access_token = row['Access']
