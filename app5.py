@@ -12,6 +12,7 @@ import numpy as np
 import csv
 import pandas as pd
 from io import StringIO
+import json
 
 def calculate_A_T(temperature_celsius):
     """
