@@ -176,9 +176,6 @@ def main():
     if 'Scope' not in st.session_state:
         st.session_state['Scope'] = ['read_station', 'read_homecoach']
     
-    st.write(st.session_state['Scope'])
-    st.write(['read_station', 'read_homecoach'])
-    
     if st.session_state['Expiration'] < int(datetime.now(timezone.utc).timestamp()):
 
         st.info("Requesting a new access token")
