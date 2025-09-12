@@ -7,6 +7,7 @@
 from datetime import datetime, timedelta, timezone, tzinfo
 import requests
 import streamlit as st
+from streamlit_gsheets import GSheetsConnection
 import math
 import numpy as np
 import csv
@@ -164,6 +165,14 @@ def main():
     # App credentials
     CLIENT_ID = '68bc5cc2dc51f3e3360f3d22' # Sometimes called app ID, looks like: '5989eA5B1AF3d8fc015d4215'
     CLIENT_SECRET = 'UeKLTCHiucBfiyBvVqmRN9iC9czdbmnMGcp' # looks like: 'BHtNLOTNSsbQFSqpCoGsQkOCjZJrothMwW'
+    
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    df = conn.read(worksheet="Example 1")
+
+    #st.dataframe(df)
+    
+    for row in df.itertuples():
+        st.write(f"{row.Access} {row.Refresh} {row.Expiration} {row.Scope}")
     
     if 'Access' not in st.session_state:
         st.session_state['Access'] = 'no_valid'
