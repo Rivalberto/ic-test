@@ -167,73 +167,17 @@ def main():
         
     field_names = ['Access', 'Refresh', 'Expiration', 'Scope']
     
-    # These tokens are generated in the 'app' created on dev.netatmo.com
-    netatmo_access_token = 'no_valid'
-    netatmo_refresh_token = '5e0f7e2dc5bdbd000c158377|0cb2ec93f55bfb266bfb3f6209498d92'
-    token_expiration = -10
-    token_scope = ["read_station", "read_homecoach"]
-
-    df = pd.DataFrame({'Access': netatmo_access_token, 'Refresh': netatmo_refresh_token, 'Expiration': token_expiration, 'Scope': token_scope})
-    #df.to_csv('out.csv', index=False)
-    #st.write(df)    
-
-    inputdata = {}
-    inputdata["path"] = "tokens_test.csv"
-    inputdata["branch"] = "main"
-    inputdata["message"] = "Automated update " + str(datetime.now())
-    inputdata["content"] = "ciao"
-    #if sha:
-    #    inputdata["sha"] = str(sha)
-
-    github_user = "Rivalberto"
-    github_token = "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"
-
-    URL = "https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv"
-    response = requests.put(URL, auth=(github_user,github_token), data = json.dumps(inputdata))
-
-    st.write(response.content.decode())
+    if 'Access' not in st.session_state:
+        st.session_state['Access'] = 'no_valid'
+        st.session_state['Expiration'] = 0
+    if 'Refresh' not in st.session_state:
+        st.session_state['Refresh'] = '5e0f7e2dc5bdbd000c158377|0cb2ec93f55bfb266bfb3f6209498d92'
+    if 'Expiration' not in st.session_state:
+        st.session_state['Expiration'] = 0
+    if 'Scope' not in st.session_state:
+        st.session_state['Scope'] = ["read_station", "read_homecoach"]
     
-    exit()
-
-    URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
-    response = requests.get(URL)
-    if response.status_code == 200:
-        tokens = pd.read_csv(StringIO(response.text))
-    else:
-        st.error("Failed to load data from GitHub.")
-        exit()
-    
-    #tokens = csv.DictReader(file)
-    for row in tokens:
-        netatmo_access_token = row['Access']
-        netatmo_refresh_token = row['Refresh']
-        if 'Expiration' in row:
-            token_expiration = int(row['Expiration'])
-        else:
-            token_expiration = int(datetime.now(timezone.utc).timestamp())-1
-        if 'Scope' in row:
-            token_scope = row['Scope']
-        else:
-            token_scope = ["read_station","read_homecoach"]
-
-    #with open('tokens.csv', mode='r', newline='', encoding='utf-8') as file:
-    #    tokens = csv.DictReader(file)
-    #    for row in tokens:
-    #        netatmo_access_token = row['Access']
-    #        netatmo_refresh_token = row['Refresh']
-    #        if 'Expiration' in row:
-    #            token_expiration = int(row['Expiration'])
-    #        else:
-    #            token_expiration = int(datetime.now(timezone.utc).timestamp())-1
-    #        if 'Scope' in row:
-    #            token_scope = row['Scope']
-    #        else:
-    #            token_scope = ["read_station","read_homecoach"]
-
-    #st.write(netatmo_access_token)
-    #st.write(netatmo_refresh_token)
-    
-    if token_expiration < int(datetime.now(timezone.utc).timestamp()):
+    if st.session_state['Expiration'] < int(datetime.now(timezone.utc).timestamp()):
 
         st.info("Requesting a new access token")
         
@@ -255,20 +199,11 @@ def main():
         #st.write(response.status_code)
         
         # Parse response data
-        netatmo_access_token = response.json()['access_token']
-        netatmo_refresh_token = response.json()['refresh_token']
-        token_expiration = int(datetime.now(timezone.utc).timestamp())+min(int(response.json()['expires_in']), int(response.json()['expire_in']))-800
-        token_scope = response.json()['scope']
-        
-        tokens = [
-            {'Access' : netatmo_access_token, 'Refresh' : netatmo_refresh_token, 'Expiration' : token_expiration, 'Scope' : token_scope}
-        ]
-        
-        with open('tokens.csv', mode='w', newline='', encoding='utf-8') as file:
-                writer = csv.DictWriter(file, fieldnames=field_names)
-                writer.writeheader()
-                writer.writerows(tokens)
-    
+        st.session_state['Access'] = response.json()['access_token']
+        st.session_state['Refresh'] = response.json()['refresh_token']
+        st.session_state['Expiration'] = int(datetime.now(timezone.utc).timestamp())+min(int(response.json()['expires_in']), int(response.json()['expire_in']))-800
+        st.session_state['Scope'] = response.json()['scope']
+            
     #SCOPE = 'read_homecoach'
     MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
     
@@ -285,7 +220,7 @@ def main():
     # Create the header for API call
     headers = {
         "accept": "application/json",
-        "Authorization": f"Bearer {netatmo_access_token}"
+        "Authorization": f"Bearer {st.session_state['Access']}"
     }
     
     # Create the payload for API call (homecoach)
