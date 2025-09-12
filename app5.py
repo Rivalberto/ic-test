@@ -164,18 +164,20 @@ def main():
     # App credentials
     CLIENT_ID = '68bc5cc2dc51f3e3360f3d22' # Sometimes called app ID, looks like: '5989eA5B1AF3d8fc015d4215'
     CLIENT_SECRET = 'UeKLTCHiucBfiyBvVqmRN9iC9czdbmnMGcp' # looks like: 'BHtNLOTNSsbQFSqpCoGsQkOCjZJrothMwW'
-        
-    field_names = ['Access', 'Refresh', 'Expiration', 'Scope']
     
     if 'Access' not in st.session_state:
         st.session_state['Access'] = 'no_valid'
         st.session_state['Expiration'] = 0
+        st.info('No access token available')
     if 'Refresh' not in st.session_state:
         st.session_state['Refresh'] = '5e0f7e2dc5bdbd000c158377|0cb2ec93f55bfb266bfb3f6209498d92'
     if 'Expiration' not in st.session_state:
         st.session_state['Expiration'] = 0
     if 'Scope' not in st.session_state:
         st.session_state['Scope'] = ["read_station", "read_homecoach"]
+
+    st.write(st.session_state['Expiration'])
+    st.write(st.session_state['Scope'])
     
     if st.session_state['Expiration'] < int(datetime.now(timezone.utc).timestamp()):
 
