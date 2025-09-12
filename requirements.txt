@@ -6,5 +6,5 @@ streamlit
 numpy
 #csv
 pandas
-io
+#io
 json
