@@ -1,7 +1,7 @@
 datetime
 requests
 streamlit
-streamlit_gsheets
+#streamlit_gsheets
 math
 numpy
 csv
