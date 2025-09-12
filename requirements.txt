@@ -2,7 +2,7 @@ datetime
 requests
 streamlit
 #streamlit_gsheets
-math
+#math
 numpy
 csv
 pandas
