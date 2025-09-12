@@ -186,7 +186,7 @@ def main():
     #    inputdata["sha"] = str(sha)
 
     github_user = "Rivalberto"
-    github_token = "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"
+    github_token = "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"
 
     URL = "https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv"
     response = requests.put(URL, auth=(github_user,github_token), data = json.dumps(inputdata))
