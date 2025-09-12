@@ -174,7 +174,7 @@ def main():
     if 'Expiration' not in st.session_state:
         st.session_state['Expiration'] = 0
     if 'Scope' not in st.session_state:
-        st.session_state['Scope'] = [0: "read_station", 1: "read_homecoach"]
+        st.session_state['Scope'] = {0: "read_station", 1: "read_homecoach"}
 
     st.write(st.session_state['Expiration'])
     st.write(st.session_state['Scope'])
