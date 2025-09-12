@@ -174,10 +174,10 @@ def main():
     if 'Expiration' not in st.session_state:
         st.session_state['Expiration'] = 0
     if 'Scope' not in st.session_state:
-        st.session_state['Scope'] = {0: 'read_station', 1: 'read_homecoach'}
+        st.session_state['Scope'] = ['read_station', 'read_homecoach']
     
     st.write(st.session_state['Scope'])
-    st.write(type(st.session_state['Scope']))
+    st.write(['read_station', 'read_homecoach'])
     
     if st.session_state['Expiration'] < int(datetime.now(timezone.utc).timestamp()):
 
