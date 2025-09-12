@@ -4,7 +4,7 @@ streamlit
 #streamlit_gsheets
 #math
 numpy
-csv
+#csv
 pandas
 io
 json
