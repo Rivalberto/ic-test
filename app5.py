@@ -184,7 +184,7 @@ def main():
         # Create payload
         URL = 'https://api.netatmo.com/oauth2/token'
         payload={'grant_type': 'refresh_token',
-                 'refresh_token': netatmo_refresh_token,
+                 'refresh_token': st.session_state['Refresh'],
                  'client_id': CLIENT_ID,
                  'client_secret': CLIENT_SECRET}
         
