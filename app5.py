@@ -163,8 +163,8 @@ def should_open_windows_based_on_TRH(
 def main():
 
     # App credentials
-    CLIENT_ID = '68bc5cc2dc51f3e3360f3d22' # Sometimes called app ID, looks like: '5989eA5B1AF3d8fc015d4215'
-    CLIENT_SECRET = 'UeKLTCHiucBfiyBvVqmRN9iC9czdbmnMGcp' # looks like: 'BHtNLOTNSsbQFSqpCoGsQkOCjZJrothMwW'
+    CLIENT_ID = st.secret.netatmo.client.it
+    CLIENT_SECRET = st.secret.netatmo.client.secret
     
     #conn = st.connection("gsheets", type=GSheetsConnection)
     #df = conn.read(worksheet="Example 1")
@@ -216,7 +216,12 @@ def main():
         st.session_state['Refresh'] = response.json()['refresh_token']
         st.session_state['Expiration'] = int(datetime.now(timezone.utc).timestamp())+min(int(response.json()['expires_in']), int(response.json()['expire_in']))-800
         st.session_state['Scope'] = response.json()['scope']
-            
+
+        st.secrets.netatmo.tokens.access = st.session_state['Access']
+        st.secrets.netatmo.tokens.refresh = st.session_state['Refresh']
+        st.secrets.netatmo.tokens.expiration = st.session_state['Expiration']
+        st.secrets.netatmo.tokens.scope = st.session_state['Scope']
+    
     #SCOPE = 'read_homecoach'
     MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
     
