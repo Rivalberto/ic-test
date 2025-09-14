@@ -173,17 +173,22 @@ def main():
     
     #for row in df.itertuples():
     #    st.write(f"{row.Access} {row.Refresh} {row.Expiration} {row.Scope}")
+
+    st.session_state['Access'] = st.secrets.netatmo.tokens.access
+    st.session_state['Refresh'] = st.secrets.netatmo.tokens.refresh
+    st.session_state['Expiration'] = st.secrets.netatmo.tokens.expiration
+    st.session_state['Scope'] = st.secrets.netatmo.tokens.scope
     
-    if 'Access' not in st.session_state:
-        st.session_state['Access'] = 'no_valid'
-        st.session_state['Expiration'] = 0
-        st.info('No access token available')
-    if 'Refresh' not in st.session_state:
-        st.session_state['Refresh'] = '5e0f7e2dc5bdbd000c158377|0cb2ec93f55bfb266bfb3f6209498d92'
-    if 'Expiration' not in st.session_state:
-        st.session_state['Expiration'] = 0
-    if 'Scope' not in st.session_state:
-        st.session_state['Scope'] = ['read_station', 'read_homecoach']
+    #if 'Access' not in st.session_state:
+    #    st.session_state['Access'] = 'no_valid'
+    #    st.session_state['Expiration'] = 0
+    #    st.info('No access token available')
+    #if 'Refresh' not in st.session_state:
+    #    st.session_state['Refresh'] = '5e0f7e2dc5bdbd000c158377|0cb2ec93f55bfb266bfb3f6209498d92'
+    #if 'Expiration' not in st.session_state:
+    #    st.session_state['Expiration'] = 0
+    #if 'Scope' not in st.session_state:
+    #    st.session_state['Scope'] = ['read_station', 'read_homecoach']
     
     if st.session_state['Expiration'] < int(datetime.now(timezone.utc).timestamp()):
 
