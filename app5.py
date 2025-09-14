@@ -217,10 +217,10 @@ def main():
         st.session_state['Expiration'] = int(datetime.now(timezone.utc).timestamp())+min(int(response.json()['expires_in']), int(response.json()['expire_in']))-800
         st.session_state['Scope'] = response.json()['scope']
 
-        st.secrets.netatmo.tokens.access = st.session_state['Access']
-        st.secrets.netatmo.tokens.refresh = st.session_state['Refresh']
-        st.secrets.netatmo.tokens.expiration = st.session_state['Expiration']
-        st.secrets.netatmo.tokens.scope = st.session_state['Scope']
+        #st.secrets.netatmo.tokens.access = st.session_state['Access']
+        #st.secrets.netatmo.tokens.refresh = st.session_state['Refresh']
+        #st.secrets.netatmo.tokens.expiration = st.session_state['Expiration']
+        #st.secrets.netatmo.tokens.scope = st.session_state['Scope']
     
     #SCOPE = 'read_homecoach'
     MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
