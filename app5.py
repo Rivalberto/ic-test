@@ -163,7 +163,7 @@ def should_open_windows_based_on_TRH(
 def main():
 
     # App credentials
-    CLIENT_ID = st.secrets.netatmo.client.it
+    CLIENT_ID = st.secrets.netatmo.client.id
     CLIENT_SECRET = st.secrets.netatmo.client.secret
     
     #conn = st.connection("gsheets", type=GSheetsConnection)
