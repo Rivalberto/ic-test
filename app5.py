@@ -199,7 +199,7 @@ def main():
 
     #URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
     #URL = 'https://api.github.com/repos/Rivalberto/ic-test/branches/main'
-    URL = 'https://api.github.com/repos/Rivalberto/ic-test/git/trees'
+    URL = 'https://api.github.com/repos/Rivalberto/ic-test/git/tree'
     response = requests.get(URL, auth=(github_user,github_token))
     st.write(response.status_code)
     if response.status_code == 200:
