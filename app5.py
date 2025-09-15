@@ -202,7 +202,7 @@ def main():
     response = requests.get(URL, auth=(github_user,github_token))
     st.write(response.status_code)
     if response.status_code == 200:
-        st.write(response.raw)
+        st.write(response.json())
         #tokens = pd.read_csv(StringIO(response.text))
     else:
         st.error("Failed to load data from GitHub.")
