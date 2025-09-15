@@ -195,7 +195,7 @@ def main():
     #st.write(df)    
 
     #URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
-    URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/*'
+    URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/'
     response = requests.get(URL)
     if response.status_code == 200:
         st.write(response.raw)
