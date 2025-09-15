@@ -189,6 +189,36 @@ def main():
     #    st.session_state['Expiration'] = 0
     #if 'Scope' not in st.session_state:
     #    st.session_state['Scope'] = ['read_station', 'read_homecoach']
+
+    #df = pd.DataFrame({'Access': netatmo_access_token, 'Refresh': netatmo_refresh_token, 'Expiration': token_expiration, 'Scope': token_scope})
+    #df.to_csv('out.csv', index=False)
+    #st.write(df)    
+
+    inputdata = {}
+    inputdata["path"] = "tokens.csv"
+    inputdata["branch"] = "main"
+    inputdata["message"] = "Automated update " + str(datetime.now())
+    inputdata["content"] = "ciao"
+    #if sha:
+    #    inputdata["sha"] = str(sha)
+
+    github_user = st.secrets.github.user
+    github_token = st.secrets.github.token
+
+    URL = "https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv"
+    response = requests.put(URL, auth=(github_user,github_token), data = json.dumps(inputdata))
+
+    st.write(response.content.decode())
+
+    exit()
+
+    #URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
+    #response = requests.get(URL)
+    #if response.status_code == 200:
+    #    tokens = pd.read_csv(StringIO(response.text))
+    #else:
+    #    st.error("Failed to load data from GitHub.")
+    #    exit()
     
     if st.session_state['Expiration'] < int(datetime.now(timezone.utc).timestamp()):
 
