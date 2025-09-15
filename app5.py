@@ -192,7 +192,10 @@ def main():
 
     #df = pd.DataFrame({'Access': netatmo_access_token, 'Refresh': netatmo_refresh_token, 'Expiration': token_expiration, 'Scope': token_scope})
     #df.to_csv('out.csv', index=False)
-    #st.write(df)    
+    #st.write(df)
+
+    github_user = st.secrets.github.user
+    github_token = st.secrets.github.token
 
     #URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
     URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main'
@@ -217,10 +220,7 @@ def main():
     #if sha:
         #inputdata["sha"] = str(sha)
     #inputdata["sha"] = response['sha']
-
-    github_user = st.secrets.github.user
-    github_token = st.secrets.github.token
-
+    
     URL = "https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv"
     response = requests.put(URL, auth=(github_user,github_token), data = json.dumps(inputdata))
 
