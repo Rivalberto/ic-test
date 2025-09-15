@@ -198,14 +198,17 @@ def main():
     github_token = st.secrets.github.token
 
     #URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
-    URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main'
+    URL = 'https://api.githubusercontent.com/Rivalberto/ic-test/refs/heads/main'
     response = requests.get(URL, auth=(github_user,github_token))
+    st.write(response.status_code)
     if response.status_code == 200:
         st.write(response.raw)
         #tokens = pd.read_csv(StringIO(response.text))
     else:
         st.error("Failed to load data from GitHub.")
         exit()
+
+    exit()
     
     #st.write(response.status_code)
     #st.write(response.raw)
