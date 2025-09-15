@@ -194,21 +194,20 @@ def main():
     #df.to_csv('out.csv', index=False)
     #st.write(df)    
 
-    URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
+    #URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
+    URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main'
     response = requests.get(URL)
     if response.status_code == 200:
-        tokens = pd.read_csv(StringIO(response.text))
+        st.write(response.raw)
+        #tokens = pd.read_csv(StringIO(response.text))
     else:
         st.error("Failed to load data from GitHub.")
         exit()
-
-    pippo = response.json()
+    
     #st.write(response.status_code)
     #st.write(response.raw)
-    #st.write(pippo)
+    #st.write(response.json())
     #st.write(tokens)
-
-    exit()
     
     inputdata = {}
     inputdata["path"] = "tokens.csv"
@@ -217,7 +216,7 @@ def main():
     inputdata["content"] = "ciao"
     #if sha:
         #inputdata["sha"] = str(sha)
-    inputdata["sha"] = response['sha']
+    #inputdata["sha"] = response['sha']
 
     github_user = st.secrets.github.user
     github_token = st.secrets.github.token
