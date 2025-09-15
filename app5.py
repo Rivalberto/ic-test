@@ -198,8 +198,7 @@ def main():
     github_token = st.secrets.github.token
 
     #URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
-    URL = 'https://api.github.com/Rivalberto/ic-test/refs/heads/main'
-    #https://api.github.com/repos/%s/branches/%s
+    URL = 'https://api.github.com/repos/Rivalberto/branches/main'
     response = requests.get(URL, auth=(github_user,github_token))
     st.write(response.status_code)
     if response.status_code == 200:
