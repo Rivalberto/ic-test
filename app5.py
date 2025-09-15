@@ -184,7 +184,7 @@ def main():
     #    st.session_state['Expiration'] = 0
     #    st.info('No access token available')
     #if 'Refresh' not in st.session_state:
-    #    st.session_state['Refresh'] = '5e0f7e2dc5bdbd000c158377|0cb2ec93f55bfb266bfb3f6209498d92'
+    #    st.session_state['Refresh'] = ''
     #if 'Expiration' not in st.session_state:
     #    st.session_state['Expiration'] = 0
     #if 'Scope' not in st.session_state:
