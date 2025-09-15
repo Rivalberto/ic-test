@@ -201,8 +201,10 @@ def main():
     else:
         st.error("Failed to load data from GitHub.")
         exit()
-
-    st.write(response.json())
+    
+    st.write(response.status_code)
+    st.write(response.raw)
+    #st.write(response.json())
     st.write(tokens)
 
     exit()
