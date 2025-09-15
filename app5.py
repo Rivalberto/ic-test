@@ -201,11 +201,12 @@ def main():
     else:
         st.error("Failed to load data from GitHub.")
         exit()
-    
-    st.write(response.status_code)
-    st.write(response.raw)
-    #st.write(response.json())
-    st.write(tokens)
+
+    pippo = response.json()
+    #st.write(response.status_code)
+    #st.write(response.raw)
+    #st.write(pippo)
+    #st.write(tokens)
 
     exit()
     
