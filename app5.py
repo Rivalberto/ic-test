@@ -194,13 +194,22 @@ def main():
     #df.to_csv('out.csv', index=False)
     #st.write(df)    
 
+    URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
+    response = requests.get(URL)
+    if response.status_code == 200:
+        tokens = pd.read_csv(StringIO(response.text))
+    else:
+        st.error("Failed to load data from GitHub.")
+        exit()
+    
     inputdata = {}
     inputdata["path"] = "tokens.csv"
     inputdata["branch"] = "main"
     inputdata["message"] = "Automated update " + str(datetime.now())
     inputdata["content"] = "ciao"
     #if sha:
-    #    inputdata["sha"] = str(sha)
+        #inputdata["sha"] = str(sha)
+    inputdata["sha"] = response['sha']
 
     github_user = st.secrets.github.user
     github_token = st.secrets.github.token
@@ -211,14 +220,6 @@ def main():
     st.write(response.content.decode())
 
     exit()
-
-    #URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
-    #response = requests.get(URL)
-    #if response.status_code == 200:
-    #    tokens = pd.read_csv(StringIO(response.text))
-    #else:
-    #    st.error("Failed to load data from GitHub.")
-    #    exit()
     
     if st.session_state['Expiration'] < int(datetime.now(timezone.utc).timestamp()):
 
