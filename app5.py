@@ -201,6 +201,11 @@ def main():
     else:
         st.error("Failed to load data from GitHub.")
         exit()
+
+    st.write(response)
+    st.write(tokens)
+
+    exit()
     
     inputdata = {}
     inputdata["path"] = "tokens.csv"
