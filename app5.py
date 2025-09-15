@@ -195,8 +195,8 @@ def main():
     #st.write(df)    
 
     #URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
-    URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/'
-    response = requests.get(URL)
+    URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main'
+    response = requests.get(URL, auth=(github_user,github_token))
     if response.status_code == 200:
         st.write(response.raw)
         #tokens = pd.read_csv(StringIO(response.text))
