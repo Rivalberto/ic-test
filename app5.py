@@ -202,7 +202,7 @@ def main():
         st.error("Failed to load data from GitHub.")
         exit()
 
-    st.write(response)
+    st.write(response.json())
     st.write(tokens)
 
     exit()
