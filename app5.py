@@ -219,7 +219,6 @@ def main():
         exit()
 
     tokens_bytes = base64.b64decode(response.json()['content'])
-    st.write(tokens_bytes.decode())
     
     tokens_file = StringIO(tokens_bytes.decode())
     tokens = csv.DictReader(tokens_file)
@@ -271,16 +270,16 @@ def main():
             "Authorization": f"Bearer {github_token}"
         }
 
-        params={owner: 'OWNER',
-            repo: 'REPO',
-            path: 'PATH',
-            message: 'a new commit message',
-            committer: {
-                name: 'Monalisa Octocat',
-                email: 'octocat@github.com'
+        params={'owner': 'OWNER',
+            'repo': 'REPO',
+            'path': 'PATH',
+            'message': 'a new commit message',
+            'committer': {
+                'name': 'Monalisa Octocat',
+                'email': 'octocat@github.com'
             },
-            content: 'bXkgdXBkYXRlZCBmaWxlIGNvbnRlbnRz',
-            sha: st.session_state['sha']
+            'content': 'ciao',
+            'sha': st.session_state['sha']
         }
         
         response = requests.put(url=URL, params=params, headers=headers)
