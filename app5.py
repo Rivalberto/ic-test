@@ -296,7 +296,9 @@ def main():
         #}
         
         content = 'Access,Refresh,Expiration,Scope,Lock\n', st.session_state['Access'], ',', st.session_state['Refresh'], ',', st.session_state['Expiration'], ',', st.session_state['Scope'], ',', st.session_state['Lock']
+        st.write(content)
         content = base64.b64encode(content)
+        st.write(content)
         
         inputdata = {}
         inputdata["path"] = "tokens.csv"
