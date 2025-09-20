@@ -202,14 +202,24 @@ def main():
     #URL = 'https://api.github.com/repos/Rivalberto/ic-test/git/trees/27f70a65fe2489176a710c146db6fd4425d22857'
     #URL = 'https://api.github.com/repos/Rivalberto/ic-test/git/blobs/54ead36da292039f64fba4fd310a998009dc7994'
     URL = 'https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv'
-    response = requests.get(URL, auth=(github_user,github_token))
+
+    headers = {
+        "accept": "application/vnd.github+json",
+        "Authorization": f"Bearer {github_token}"
+    }
+    
+    #response = requests.get(URL, auth=(github_user,github_token))
+    response = requests.get(url=URL, headers=headers)
+    
     if response.status_code == 200:
         st.write(response.json())
         #tokens = pd.read_csv(StringIO(response.text))
     else:
         st.write(response.status_code)
-        st.error("Failed to load data from GitHub.")
-
+        st.error("Failed to load data from GitHub.")    
+    
+    response = requests.get(url=URL, headers=headers)
+    
     exit()
     
     #st.write(response.status_code)
