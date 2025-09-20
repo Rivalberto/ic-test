@@ -14,6 +14,7 @@ import csv
 import pandas as pd
 from io import StringIO
 import json
+import base64
 
 def calculate_A_T(temperature_celsius):
     """
@@ -216,7 +217,8 @@ def main():
     #st.write(response.status_code)
     st.write(response.json())
     st.write(response.json()['content'])
-    st.write(response.content)
+    st.write(base64.b64decode(response.json()['content']))
+    #st.write(response.content)
     #st.write(response.raw)
     #st.write(tokens)
     
