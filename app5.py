@@ -229,7 +229,7 @@ def main():
         st.session_state['Access'] = row['Access']
         st.session_state['Refresh'] = row['Refresh']
         st.session_state['Expiration'] = int(row['Expiration'])
-        st.session_state['Scope'] = row['Scope'] 
+        st.session_state['Scope'] = row['Scope']
         st.session_state['Lock'] = row['Lock']
     
     if st.session_state['Lock'] == 'Yes':
@@ -295,9 +295,9 @@ def main():
             #'sha': st.session_state['sha']
         #}
         
-        content = f'Access,Refresh,Expiration,Scope,Lock\n{st.session_state['Access']},{st.session_state['Refresh']},{st.session_state['Expiration']},{st.session_state['Scope']},{st.session_state['Lock']}'
+        content = f'Access,Refresh,Expiration,Scope,Lock\n{st.session_state['Access']},{st.session_state['Refresh']},{str(st.session_state['Expiration'])},{st.session_state['Scope']},{st.session_state['Lock']}'
         st.write(content)
-        content = base64.b64encode(content)
+        content = base64.b64encode(content.encode)
         st.write(content)
         
         inputdata = {}
