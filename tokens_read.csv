@@ -1,0 +1,2 @@
+Access,Refresh,Expiration,Scope,Lock
+,,10800,[read_station read_homecoach],No
