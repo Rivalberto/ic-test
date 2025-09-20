@@ -198,7 +198,7 @@ def main():
     github_user = st.secrets.github.user
     github_token = st.secrets.github.token
 
-    URL = 'https://api.github.com/repos/Rivalberto/ic-test/contents/tokens_read.csv'
+    URL = 'https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv'
 
     headers = {
         "accept": "application/vnd.github+json",
@@ -219,7 +219,6 @@ def main():
         exit()
 
     tokens_bytes = base64.b64decode(response.json()['content'])
-    
     tokens_file = StringIO(tokens_bytes.decode())
     tokens = csv.DictReader(tokens_file)
     
@@ -235,18 +234,14 @@ def main():
     if st.session_state['Lock'] == 'Yes':
         st.warning("Token contents locked. Please try again.")
         exit()
-
-
     
-    URL = 'https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv'
-    response = requests.get(url=URL, headers=headers)
-    if response.status_code != 200:
-        st.write(response.status_code)
-        st.error("Failed to load tokens data from GitHub.")
-        exit()
-    st.session_state['sha'] = response.json()['sha']
-
-
+    #URL = 'https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv'
+    #response = requests.get(url=URL, headers=headers)
+    #if response.status_code != 200:
+    #    st.write(response.status_code)
+    #    st.error("Failed to load tokens data from GitHub.")
+    #    exit()
+    #st.session_state['sha'] = response.json()['sha']
     
     if st.session_state['Expiration'] < int(datetime.now(timezone.utc).timestamp()):
 
@@ -298,16 +293,13 @@ def main():
         delimiter = " "
         
         content = f'Access,Refresh,Expiration,Scope,Lock\n{st.session_state['Access']},{st.session_state['Refresh']},{str(st.session_state['Expiration'])},{delimiter.join(st.session_state['Scope'])},{st.session_state['Lock']}'
-        st.write(content)
         content = base64.b64encode(content.encode())
-        content = content.decode()
-        st.write(content)
         
         inputdata = {}
         inputdata["path"] = "tokens.csv"
         inputdata["branch"] = "main"
         inputdata["message"] = "Automated update " + str(datetime.now())
-        inputdata["content"] = content
+        inputdata["content"] = content.decode()
         inputdata["sha"] = st.session_state['sha']
         
         response = requests.put(URL, auth=(github_user,github_token), data = json.dumps(inputdata))
