@@ -270,7 +270,10 @@ def main():
             "Authorization": f"Bearer {github_token}"
         }
 
-        params={
+        data={
+            'owner': 'Rivalberto',
+            'repo': 'ic-test',
+            'path': 'tokens.csv',
             'message': 'new commit',
             'committer': {
                 'name': 'Alberto Riva',
@@ -280,7 +283,7 @@ def main():
             'sha': st.session_state['sha']
         }
         
-        response = requests.put(url=URL, params=params, headers=headers)
+        response = requests.put(url=URL, data=data)
         
         if response.status_code != 200:
             st.write(response.status_code)
