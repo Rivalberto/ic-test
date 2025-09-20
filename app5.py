@@ -270,20 +270,23 @@ def main():
             "Authorization": f"Bearer {github_token}"
         }
 
-        params={'owner': 'OWNER',
-            'repo': 'REPO',
-            'path': 'PATH',
-            'message': 'a new commit message',
+        params={
+            'message': 'new commit',
             'committer': {
-                'name': 'Monalisa Octocat',
-                'email': 'octocat@github.com'
+                'name': 'Alberto Riva',
+                'email': 'alberto.riva.mail@gmail.com'
             },
             'content': 'ciao',
             'sha': st.session_state['sha']
         }
         
         response = requests.put(url=URL, params=params, headers=headers)
-    
+        
+        if response.status_code != 200:
+            st.write(response.status_code)
+            st.error("Failed to upload tokens data to GitHub.")
+            exit()
+        
         #inputdata = {}
         #inputdata["path"] = "tokens.csv"
         #inputdata["branch"] = "main"
