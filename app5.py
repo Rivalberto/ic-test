@@ -217,8 +217,10 @@ def main():
     if response.json()['encoding'] != 'base64':
         st.error("Token contents not encoded in base64 format")
         exit()
+
+    tokens_bytes = base64.b64decode(response.json()['content'])
     
-    tokens_file = StringIO(base64.b64decode(response.json()['content']))
+    tokens_file = StringIO(tokens_bytes.decode())
     tokens = csv.DictReader(tokens_file)
     st.write(tokens)
 
