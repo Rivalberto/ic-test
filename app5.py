@@ -207,30 +207,29 @@ def main():
     
     response = requests.get(url=URL, headers=headers)
     
-    #if response.status_code == 200:
-    #    st.write(response.json())
-    #    #tokens = pd.read_csv(StringIO(response.text))
-    #else:
-    #    st.write(response.status_code)
-    #    st.error("Failed to load data from GitHub.")
-    
-    #st.write(response.status_code)
-    st.write(response.json())
-    st.write(response.json()['content'])
-    st.write(base64.b64decode(response.json()['content']))
-    #st.write(response.content)
-    #st.write(response.raw)
-    #st.write(tokens)
-    
-    #st.session_state['sha'] = response.json()['sha']
-    #st.session_state['Access'] = response.json()['Access']
-    #st.session_state['Refresh'] = response.json()['Refresh']
-    #st.session_state['Expiration'] = response.json()['Expiration']
-    #st.session_state['Scope'] = response.json()['Scope'] 
-    #st.session_state['Lock'] = response.json()['Lock']
+    if response.status_code != 200:
+        st.write(response.status_code)
+        st.error("Failed to load tokens data from GitHub.")
+        exit()
 
-    #if(response.json()['encoding'] == 'base64')
-    #    content = response.json()['content']
+    #tokens = pd.read_csv(StringIO(response.text))
+    
+    if response.json()['encoding'] != 'base64':
+        st.error("Token contents not encoded in base64 format")
+        exit()
+    
+    tokens = csv.DictReader(base64.b64decode(response.json()['content']))
+    
+    st.session_state['sha'] = response.json()['sha']
+    st.session_state['Access'] = tokens['Access']
+    st.session_state['Refresh'] = tokens['Refresh']
+    st.session_state['Expiration'] = tokens['Expiration']
+    st.session_state['Scope'] = tokens['Scope'] 
+    st.session_state['Lock'] = tokens['Lock']
+
+    if st.session_state['Lock'] == 'Yes':
+        st.warning("Token contents locked. Please try again.")
+        exit()
     
     #inputdata = {}
     #inputdata["path"] = "tokens.csv"
