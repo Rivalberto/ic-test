@@ -219,6 +219,8 @@ def main():
         exit()
     
     tokens = csv.DictReader(base64.b64decode(response.json()['content']))
+
+    st.write(tokens)
     
     st.session_state['sha'] = response.json()['sha']
     st.session_state['Access'] = tokens['Access']
