@@ -283,7 +283,7 @@ def main():
             'sha': st.session_state['sha']
         }
         
-        response = requests.put(url=URL, data=data)
+        response = requests.put(url=URL, auth=(github_user,github_token), data=data)
         
         if response.status_code != 200:
             st.write(response.status_code)
