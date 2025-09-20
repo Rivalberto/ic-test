@@ -174,10 +174,10 @@ def main():
     #for row in df.itertuples():
     #    st.write(f"{row.Access} {row.Refresh} {row.Expiration} {row.Scope}")
 
-    st.session_state['Access'] = st.secrets.netatmo.tokens.access
-    st.session_state['Refresh'] = st.secrets.netatmo.tokens.refresh
-    st.session_state['Expiration'] = st.secrets.netatmo.tokens.expiration
-    st.session_state['Scope'] = st.secrets.netatmo.tokens.scope
+    #st.session_state['Access'] = st.secrets.netatmo.tokens.access
+    #st.session_state['Refresh'] = st.secrets.netatmo.tokens.refresh
+    #st.session_state['Expiration'] = st.secrets.netatmo.tokens.expiration
+    #st.session_state['Scope'] = st.secrets.netatmo.tokens.scope
     
     #if 'Access' not in st.session_state:
     #    st.session_state['Access'] = 'no_valid'
@@ -197,10 +197,6 @@ def main():
     github_user = st.secrets.github.user
     github_token = st.secrets.github.token
 
-    #URL = 'https://raw.githubusercontent.com/Rivalberto/ic-test/refs/heads/main/tokens.csv'
-    #URL = 'https://api.github.com/repos/Rivalberto/ic-test/branches/main'
-    #URL = 'https://api.github.com/repos/Rivalberto/ic-test/git/trees/27f70a65fe2489176a710c146db6fd4425d22857'
-    #URL = 'https://api.github.com/repos/Rivalberto/ic-test/git/blobs/54ead36da292039f64fba4fd310a998009dc7994'
     URL = 'https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv'
 
     headers = {
@@ -208,24 +204,31 @@ def main():
         "Authorization": f"Bearer {github_token}"
     }
     
-    #response = requests.get(URL, auth=(github_user,github_token))
     response = requests.get(url=URL, headers=headers)
     
-    if response.status_code == 200:
-        st.write(response.json())
-        #tokens = pd.read_csv(StringIO(response.text))
-    else:
-        st.write(response.status_code)
-        st.error("Failed to load data from GitHub.")    
-    
-    response = requests.get(url=URL, headers=headers)
-    
-    exit()
+    #if response.status_code == 200:
+    #    st.write(response.json())
+    #    #tokens = pd.read_csv(StringIO(response.text))
+    #else:
+    #    st.write(response.status_code)
+    #    st.error("Failed to load data from GitHub.")
     
     #st.write(response.status_code)
+    st.write(response.json())
+    st.write(response.json()['content'])
+    st.write(response.content)
     #st.write(response.raw)
-    #st.write(response.json())
     #st.write(tokens)
+    
+    #st.session_state['sha'] = response.json()['sha']
+    #st.session_state['Access'] = response.json()['Access']
+    #st.session_state['Refresh'] = response.json()['Refresh']
+    #st.session_state['Expiration'] = response.json()['Expiration']
+    #st.session_state['Scope'] = response.json()['Scope'] 
+    #st.session_state['Lock'] = response.json()['Lock']
+
+    #if(response.json()['encoding'] == 'base64')
+    #    content = response.json()['content']
     
     #inputdata = {}
     #inputdata["path"] = "tokens.csv"
