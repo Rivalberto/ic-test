@@ -220,15 +220,15 @@ def main():
     
     tokens = csv.DictReader(base64.b64decode(response.json()['content']))
 
-    st.write(tokens)
-    
     st.session_state['sha'] = response.json()['sha']
-    st.session_state['Access'] = tokens['Access']
-    st.session_state['Refresh'] = tokens['Refresh']
-    st.session_state['Expiration'] = tokens['Expiration']
-    st.session_state['Scope'] = tokens['Scope'] 
-    st.session_state['Lock'] = tokens['Lock']
-
+    
+    for row in tokens:
+        st.session_state['Access'] = row['Access']
+        st.session_state['Refresh'] = row['Refresh']
+        st.session_state['Expiration'] = row['Expiration']
+        st.session_state['Scope'] = row['Scope'] 
+        st.session_state['Lock'] = row['Lock']
+    
     if st.session_state['Lock'] == 'Yes':
         st.warning("Token contents locked. Please try again.")
         exit()
