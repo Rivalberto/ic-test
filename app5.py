@@ -290,7 +290,7 @@ def main():
         inputdata["path"] = "tokens.csv"
         inputdata["branch"] = "main"
         inputdata["message"] = "Automated update " + str(datetime.now())
-        inputdata["content"] = 
+        inputdata["content"] = content
         inputdata["sha"] = st.session_state['sha']
         
         response = requests.put(URL, auth=(github_user,github_token), data = json.dumps(inputdata))
