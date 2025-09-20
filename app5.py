@@ -221,7 +221,7 @@ def main():
     tokens_bytes = base64.b64decode(response.json()['content'])
     st.write(tokens_bytes.decode())
 
-    csv.list_dialects()
+    st.write(csv.list_dialects())
     
     tokens_file = StringIO(tokens_bytes.decode())
     tokens = csv.DictReader(tokens_file)
@@ -230,7 +230,6 @@ def main():
     st.session_state['sha'] = response.json()['sha']
     
     for row in tokens:
-        st.write('row: {row}')
         st.session_state['Access'] = row['Access']
         st.session_state['Refresh'] = row['Refresh']
         st.session_state['Expiration'] = row['Expiration']
