@@ -190,7 +190,7 @@ def main():
     #if 'Scope' not in st.session_state:
     #    st.session_state['Scope'] = ['read_station', 'read_homecoach']
 
-    #df = pd.DataFrame({'Access': netatmo_access_token, 'Refresh': netatmo_refresh_token, 'Expiration': token_expiration, 'Scope': token_scope})
+    #df = pd.DataFrame({'Access': netatmo_access_token, 'Refresh': netatmo_refresh_token, 'Expiration': token_expiration, 'Scope': token_scope, 'Lock': token_lock})
     #df.to_csv('out.csv', index=False)
     #st.write(df)
 
