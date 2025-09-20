@@ -265,40 +265,38 @@ def main():
         
         URL = "https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv"
         
-        headers = {
-            "accept": "application/vnd.github+json",
-            "Authorization": f"Bearer {github_token}"
-        }
+        #headers = {
+        #    "accept": "application/vnd.github+json",
+        #    "Authorization": f"Bearer {github_token}"
+        #}
 
-        data={
-            'owner': 'Rivalberto',
-            'repo': 'ic-test',
-            'path': 'tokens.csv',
-            'message': 'new commit',
-            'committer': {
-                'name': 'Alberto Riva',
-                'email': 'alberto.riva.mail@gmail.com'
-            },
-            'content': 'ciao',
-            'sha': st.session_state['sha']
-        }
+        #data={
+            #'owner': 'Rivalberto',
+            #'repo': 'ic-test',
+            #'path': 'tokens.csv',
+            #'message': 'new commit',
+            #'committer': {
+            #    'name': 'Alberto Riva',
+            #    'email': 'alberto.riva.mail@gmail.com'
+            #},
+            #'content': 'ciao',
+            #'sha': st.session_state['sha']
+        #}
+
+        inputdata = {}
+        inputdata["path"] = "tokens.csv"
+        inputdata["branch"] = "main"
+        inputdata["message"] = "Automated update " + str(datetime.now())
+        inputdata["content"] = "ciao"
+        inputdata["sha"] = st.session_state['sha']
         
-        response = requests.put(url=URL, auth=(github_user,github_token), data=data)
+        response = requests.put(URL, auth=(github_user,github_token), data = json.dumps(inputdata))
         
         if response.status_code != 200:
             st.write(response.status_code)
             st.error("Failed to upload tokens data to GitHub.")
             exit()
         
-        #inputdata = {}
-        #inputdata["path"] = "tokens.csv"
-        #inputdata["branch"] = "main"
-        #inputdata["message"] = "Automated update " + str(datetime.now())
-        #inputdata["content"] = "ciao"
-        #inputdata["sha"] = 54ead36da292039f64fba4fd310a998009dc7994
-        
-        #response = requests.put(URL, auth=(github_user,github_token), data = json.dumps(inputdata))
-    
     #SCOPE = 'read_homecoach'
     MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
     
