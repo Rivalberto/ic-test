@@ -223,7 +223,6 @@ def main():
     
     tokens_file = StringIO(tokens_bytes.decode())
     tokens = csv.DictReader(tokens_file)
-    #tokens = csv.DictReader(tokens_file, dialect='unix')
     
     st.session_state['sha'] = response.json()['sha']
     
@@ -237,18 +236,6 @@ def main():
     if st.session_state['Lock'] == 'Yes':
         st.warning("Token contents locked. Please try again.")
         exit()
-    
-    #inputdata = {}
-    #inputdata["path"] = "tokens.csv"
-    #inputdata["branch"] = "main"
-    #inputdata["message"] = "Automated update " + str(datetime.now())
-    #inputdata["content"] = "ciao"
-    #inputdata["sha"] = 54ead36da292039f64fba4fd310a998009dc7994
-    
-    #URL = "https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv"
-    #response = requests.put(URL, auth=(github_user,github_token), data = json.dumps(inputdata))
-
-    #st.write(response.content.decode())
     
     if st.session_state['Expiration'] < int(datetime.now(timezone.utc).timestamp()):
 
@@ -276,11 +263,36 @@ def main():
         st.session_state['Refresh'] = response.json()['refresh_token']
         st.session_state['Expiration'] = int(datetime.now(timezone.utc).timestamp())+min(int(response.json()['expires_in']), int(response.json()['expire_in']))-800
         st.session_state['Scope'] = response.json()['scope']
+        
+        URL = "https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv"
+        
+        headers = {
+            "accept": "application/vnd.github+json",
+            "Authorization": f"Bearer {github_token}"
+        }
 
-        #st.secrets.netatmo.tokens.access = st.session_state['Access']
-        #st.secrets.netatmo.tokens.refresh = st.session_state['Refresh']
-        #st.secrets.netatmo.tokens.expiration = st.session_state['Expiration']
-        #st.secrets.netatmo.tokens.scope = st.session_state['Scope']
+        params={owner: 'OWNER',
+            repo: 'REPO',
+            path: 'PATH',
+            message: 'a new commit message',
+            committer: {
+                name: 'Monalisa Octocat',
+                email: 'octocat@github.com'
+            },
+            content: 'bXkgdXBkYXRlZCBmaWxlIGNvbnRlbnRz',
+            sha: st.session_state['sha']
+        }
+        
+        response = requests.put(url=URL, params=params, headers=headers)
+    
+        #inputdata = {}
+        #inputdata["path"] = "tokens.csv"
+        #inputdata["branch"] = "main"
+        #inputdata["message"] = "Automated update " + str(datetime.now())
+        #inputdata["content"] = "ciao"
+        #inputdata["sha"] = 54ead36da292039f64fba4fd310a998009dc7994
+        
+        #response = requests.put(URL, auth=(github_user,github_token), data = json.dumps(inputdata))
     
     #SCOPE = 'read_homecoach'
     MAC_homecoach = '70:ee:50:3e:c4:de' # MAC address of the device looks like: '21:ff:31:69:2d:19'
