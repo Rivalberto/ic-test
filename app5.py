@@ -230,6 +230,7 @@ def main():
     st.session_state['sha'] = response.json()['sha']
     
     for row in tokens:
+        st.write(row)
         st.session_state['Access'] = row['Access']
         st.write(st.session_state['Access'])
         st.session_state['Refresh'] = row['Refresh']
