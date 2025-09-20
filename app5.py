@@ -297,7 +297,7 @@ def main():
         
         content = f'Access,Refresh,Expiration,Scope,Lock\n{st.session_state['Access']},{st.session_state['Refresh']},{str(st.session_state['Expiration'])},{st.session_state['Scope']},{st.session_state['Lock']}'
         st.write(content)
-        content = base64.b64encode(content.encode)
+        content = base64.b64encode(content.encode())
         st.write(content)
         
         inputdata = {}
