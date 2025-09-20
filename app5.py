@@ -201,13 +201,16 @@ def main():
     #URL = 'https://api.github.com/repos/Rivalberto/ic-test/branches/main'
     #URL = 'https://api.github.com/repos/Rivalberto/ic-test/git/trees/27f70a65fe2489176a710c146db6fd4425d22857'
     #URL = 'https://api.github.com/repos/Rivalberto/ic-test/git/blobs/54ead36da292039f64fba4fd310a998009dc7994'
-    #response = requests.get(URL, auth=(github_user,github_token))
-    #if response.status_code == 200:
-    #    st.write(response.json())
-    #    #tokens = pd.read_csv(StringIO(response.text))
-    #else:
-    #    st.write(response.status_code)
-    #    st.error("Failed to load data from GitHub.")
+    URL = 'https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv'
+    response = requests.get(URL, auth=(github_user,github_token))
+    if response.status_code == 200:
+        st.write(response.json())
+        #tokens = pd.read_csv(StringIO(response.text))
+    else:
+        st.write(response.status_code)
+        st.error("Failed to load data from GitHub.")
+
+    exit()
     
     #st.write(response.status_code)
     #st.write(response.raw)
