@@ -217,11 +217,9 @@ def main():
     if response.json()['encoding'] != 'base64':
         st.error("Token contents not encoded in base64 format")
         exit()
-
-    st.write(base64.b64decode(response.json()['content']))
-    exit()
     
-    tokens = csv.DictReader(base64.b64decode(response.json()['content']))
+    tokens = csv.DictReader(StringIO(base64.b64decode(response.json()['content'])))
+    st.write(tokens)
 
     st.session_state['sha'] = response.json()['sha']
     
