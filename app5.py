@@ -294,8 +294,10 @@ def main():
             #'content': 'ciao',
             #'sha': st.session_state['sha']
         #}
+
+        delimiter = " "
         
-        content = f'Access,Refresh,Expiration,Scope,Lock\n{st.session_state['Access']},{st.session_state['Refresh']},{str(st.session_state['Expiration'])},{st.session_state['Scope']},{st.session_state['Lock']}'
+        content = f'Access,Refresh,Expiration,Scope,Lock\n{st.session_state['Access']},{st.session_state['Refresh']},{str(st.session_state['Expiration'])},{delimiter.join(st.session_state['Scope'])},{st.session_state['Lock']}'
         st.write(content)
         content = base64.b64encode(content.encode())
         content = content.decode()
