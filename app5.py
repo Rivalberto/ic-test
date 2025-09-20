@@ -231,6 +231,7 @@ def main():
     
     for row in tokens:
         st.session_state['Access'] = row['Access']
+        st.write(st.session_state['Access'])
         st.session_state['Refresh'] = row['Refresh']
         st.session_state['Expiration'] = row['Expiration']
         st.session_state['Scope'] = row['Scope'] 
