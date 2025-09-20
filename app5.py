@@ -219,6 +219,7 @@ def main():
         exit()
 
     tokens_bytes = base64.b64decode(response.json()['content'])
+    st.write(tokens_bytes.decode())
     
     tokens_file = StringIO(tokens_bytes.decode())
     tokens = csv.DictReader(tokens_file)
