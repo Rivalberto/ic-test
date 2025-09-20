@@ -198,7 +198,7 @@ def main():
     github_user = st.secrets.github.user
     github_token = st.secrets.github.token
 
-    URL = 'https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv'
+    URL = 'https://api.github.com/repos/Rivalberto/ic-test/contents/tokens_read.csv'
 
     headers = {
         "accept": "application/vnd.github+json",
@@ -235,6 +235,24 @@ def main():
     if st.session_state['Lock'] == 'Yes':
         st.warning("Token contents locked. Please try again.")
         exit()
+
+
+    
+    URL = 'https://api.github.com/repos/Rivalberto/ic-test/contents/tokens.csv'
+    response = requests.get(url=URL, headers=headers)
+    if response.status_code != 200:
+        st.write(response.status_code)
+        st.error("Failed to load tokens data from GitHub.")
+        exit()
+    if response.json()['encoding'] != 'base64':
+        st.error("Token contents not encoded in base64 format")
+        exit()
+    tokens_bytes = base64.b64decode(response.json()['content'])
+    tokens_file = StringIO(tokens_bytes.decode())
+    tokens = csv.DictReader(tokens_file)
+    st.session_state['sha'] = response.json()['sha']
+
+
     
     if st.session_state['Expiration'] < int(datetime.now(timezone.utc).timestamp()):
 
