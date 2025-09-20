@@ -224,7 +224,7 @@ def main():
     st.write(csv.list_dialects())
     
     tokens_file = StringIO(tokens_bytes.decode())
-    tokens = csv.DictReader(tokens_file)
+    tokens = csv.DictReader(tokens_file, dialect='unix')
     st.write(tokens)
 
     st.session_state['sha'] = response.json()['sha']
