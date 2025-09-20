@@ -222,15 +222,15 @@ def main():
     st.write(tokens_bytes.decode())
     
     tokens_file = StringIO(tokens_bytes.decode())
-    #tokens = csv.DictReader(tokens_file)
-    tokens = csv.DictReader(tokens_file, dialect='unix')
+    tokens = csv.DictReader(tokens_file)
+    #tokens = csv.DictReader(tokens_file, dialect='unix')
     
     st.session_state['sha'] = response.json()['sha']
     
     for row in tokens:
         st.session_state['Access'] = row['Access']
         st.session_state['Refresh'] = row['Refresh']
-        st.session_state['Expiration'] = row['Expiration']
+        st.session_state['Expiration'] = int(row['Expiration'])
         st.session_state['Scope'] = row['Scope'] 
         st.session_state['Lock'] = row['Lock']
     
