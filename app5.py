@@ -282,12 +282,15 @@ def main():
             #'content': 'ciao',
             #'sha': st.session_state['sha']
         #}
-
+        
+        content = 'Access,Refresh,Expiration,Scope,Lock\n', st.session_state['Access'], ',', st.session_state['Refresh'], ',', st.session_state['Expiration'], ',', st.session_state['Scope'], ',', st.session_state['Lock']
+        content = base64.b64encode(content)
+        
         inputdata = {}
         inputdata["path"] = "tokens.csv"
         inputdata["branch"] = "main"
         inputdata["message"] = "Automated update " + str(datetime.now())
-        inputdata["content"] = "ciao"
+        inputdata["content"] = 
         inputdata["sha"] = st.session_state['sha']
         
         response = requests.put(URL, auth=(github_user,github_token), data = json.dumps(inputdata))
