@@ -266,6 +266,8 @@ def main():
         
         # Parse response data
         st.session_state['Access'] = response.json()['access_token']
+        if st.session_state['Refresh'] != response.json()['refresh_token']:
+            st.warning('Refresh token changed')
         st.session_state['Refresh'] = response.json()['refresh_token']
         st.session_state['Expiration'] = int(datetime.now(timezone.utc).timestamp())+min(int(response.json()['expires_in']), int(response.json()['expire_in']))-800
         st.session_state['Scope'] = response.json()['scope']
